@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // Each card owns its own state; only the restore flow, opened from two cards,
   // lives here.
@@ -31,7 +32,7 @@
   <div>
     <a href="/" use:link class="btn btn-ghost btn-sm -ml-2">
       <Icon name="arrowLeft" size={15} />
-      Devices
+      设备
     </a>
   </div>
 
@@ -51,13 +52,13 @@
       />
     {/if}
   {:else if loadError}
-    <EmptyState icon="alert" tone="danger" title="Could not load device" message={loadError}>
-      <button type="button" class="btn btn-primary btn-sm" onclick={() => devicesStore.refresh()}>Retry</button>
+    <EmptyState icon="alert" tone="danger" title="无法加载设备" message={loadError}>
+      <button type="button" class="btn btn-primary btn-sm" onclick={() => devicesStore.refresh()}>重试</button>
     </EmptyState>
   {:else}
     <div class="flex items-center gap-3 text-sm text-base-content/60">
       <span class="loading loading-spinner loading-sm"></span>
-      Loading device…
+      正在加载设备……
     </div>
   {/if}
 </div>

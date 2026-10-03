@@ -1,3 +1,5 @@
+# Modified by somanybaby on 2026-10-03: Chinese fork metadata and modification notice.
+# Upstream: wizier/airvault. See NOTICE.md; GPL-3.0-or-later.
 # netmuxd ships a prebuilt binary; the digest pins this exact tag. The image is
 # built for linux/amd64 only, so no other release is fetched.
 ARG NETMUXD_TAG=v0.4.3
@@ -28,9 +30,9 @@ RUN make build COMPONENTS= VERSION=${VERSION} GOTAGS=timetzdata DAEMON_BINARY=/o
 FROM debian:trixie-slim AS runtime
 ARG VERSION=dev
 LABEL org.opencontainers.image.title="AirVault" \
-      org.opencontainers.image.description="Self-hosted iPhone backup server " \
-      org.opencontainers.image.source="https://github.com/wizier/airvault" \
-      org.opencontainers.image.licenses="GPL-3.0" \
+      org.opencontainers.image.description="Self-hosted iPhone backup server, Simplified Chinese community edition" \
+      org.opencontainers.image.source="https://github.com/somanybaby/airvault" \
+      org.opencontainers.image.licenses="GPL-3.0-or-later" \
       org.opencontainers.image.version="$VERSION"
 
 # usbmuxd: USB transport; netmuxd: Wi-Fi on top; util-linux: setpriv for PUID/PGID
@@ -48,6 +50,7 @@ RUN set -eux; \
 COPY --from=build /out/airvault /usr/local/bin/airvault
 COPY --chmod=0755 scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY LICENSE /licenses/
+COPY NOTICE.md /licenses/
 
 EXPOSE 8080
 ENV AIRVAULT_BIND_HOST=0.0.0.0

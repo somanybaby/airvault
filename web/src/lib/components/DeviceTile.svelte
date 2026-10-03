@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import { link } from 'svelte-spa-router';
   import type { Device } from '../api/devices';
@@ -36,7 +37,7 @@
 {#snippet encryptionLock()}
   <span
     class={device.encrypted ? 'text-success' : 'text-warning'}
-    title={device.encrypted ? 'Backups are encrypted' : 'Backups are not encrypted'}
+    title={device.encrypted ? "备份已加密" : "备份未加密"}
   >
     <Icon name={device.encrypted ? 'lock' : 'unlocked'} size={15} stroke={2} />
   </span>
@@ -59,7 +60,7 @@
           <DeviceBattery {device} />
         {:else if device.lastSeen}
           <span class="truncate text-xs text-base-content/50" title={formatDateTime(device.lastSeen)}>
-            Seen {relativeTime(device.lastSeen, $now)}
+            上次连接于 {relativeTime(device.lastSeen, $now)}
           </span>
         {/if}
       </div>
@@ -107,7 +108,7 @@
           <div class="flex items-center justify-between gap-3 text-primary">
             <span class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide">
               <Icon name="backup" size={14} stroke={2} />
-              Last backup
+              最近备份
             </span>
             <span class="flex items-center gap-1.5">
               {#if lastFailure}
@@ -125,8 +126,8 @@
               {device.lastBackup
                 ? relativeTime(device.lastBackup, $now)
                 : device.restorePoints
-                  ? 'No usable backup'
-                  : 'No backups yet'}
+                  ? "没有可用备份"
+                  : "尚无备份"}
             </strong>
             {#if device.lastBackup}
               <span class="max-w-28 truncate text-xs text-base-content/50">
@@ -140,24 +141,24 @@
 
     <div class="stats grid w-full grid-cols-2 border border-base-300 bg-base-100">
       <div class="stat">
-        <div class="stat-title">Stored</div>
+        <div class="stat-title">占用空间</div>
         <div
           class="stat-value text-xl"
-          title="Unique object payload referenced by all restore points; excludes manifests and filesystem overhead"
+          title="所有恢复点引用的数据对象去重后的大小，不含文件清单和文件系统开销"
         >
           {device.diskBytes !== undefined ? formatBytes(device.diskBytes) : '—'}
         </div>
       </div>
       <div class="stat">
-        <div class="stat-title">Restore points</div>
-        <div class="stat-value text-xl" title="Restorable backup snapshots kept">
+        <div class="stat-title">恢复点</div>
+        <div class="stat-value text-xl" title="保留的可恢复备份数量">
           {device.restorePoints || '—'}
         </div>
       </div>
     </div>
 
     <div class="card-actions mt-auto items-center justify-between text-xs text-base-content/60">
-      <span>Open device</span>
+      <span>查看设备</span>
       <Icon name="arrowRight" size={18} stroke={2} class="text-primary" />
     </div>
   </div>

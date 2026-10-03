@@ -1,3 +1,4 @@
+// Modified by somanybaby on 2026-10-03: Simplified Chinese time and date labels. See NOTICE.md; GPL-3.0-or-later.
 export function shortUdid(udid: string): string {
   if (!udid) return '';
   if (udid.length <= 15) return udid;
@@ -14,26 +15,26 @@ export function relativeTime(iso: string, now: number = Date.now()): string {
   const s = Math.abs(deltaSec);
 
   let out: string;
-  if (s < 45) return past ? 'just now' : 'in a moment';
-  else if (s < 5400) out = `${Math.round(s / 60)}m`;
-  else if (s < 129600) out = `${Math.round(s / 3600)}h`;
-  else if (s < 1728000) out = `${Math.round(s / 86400)}d`;
-  else out = `${Math.round(s / 604800)}w`;
+  if (s < 45) return past ? '刚刚' : '片刻后';
+  else if (s < 5400) out = `${Math.round(s / 60)} 分钟`;
+  else if (s < 129600) out = `${Math.round(s / 3600)} 小时`;
+  else if (s < 1728000) out = `${Math.round(s / 86400)} 天`;
+  else out = `${Math.round(s / 604800)} 周`;
 
-  return past ? `${out} ago` : `in ${out}`;
+  return past ? `${out}前` : `${out}后`;
 }
 
 export function formatDateTime(iso?: string | null): string {
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '—';
-  return d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+  return d.toLocaleString('zh-CN', { dateStyle: 'medium', timeStyle: 'short' });
 }
 
 /** From unix seconds (AFC mtimes). */
 export function formatDate(unixSec?: number): string {
   if (!unixSec) return '';
-  return new Date(unixSec * 1000).toLocaleDateString(undefined, {
+  return new Date(unixSec * 1000).toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -73,7 +74,7 @@ export function formatDuration(startIso?: string, endIso?: string): string {
   secs -= h * 3600;
   const m = Math.floor(secs / 60);
   secs -= m * 60;
-  if (h > 0) return `${h}h ${m}m`;
-  if (m > 0) return `${m}m ${secs}s`;
-  return `${secs}s`;
+  if (h > 0) return `${h} 小时 ${m} 分钟`;
+  if (m > 0) return `${m} 分钟 ${secs} 秒`;
+  return `${secs} 秒`;
 }

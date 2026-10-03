@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import type { Device } from '../api/devices';
   import { deleteAllBackups, unpair } from '../stores.svelte';
@@ -19,20 +20,20 @@
 </script>
 
 <div class="dropdown dropdown-end">
-  <div tabindex="0" role="button" class="btn btn-square btn-ghost" aria-label="Device actions">
+  <div tabindex="0" role="button" class="btn btn-square btn-ghost" aria-label="设备操作">
     <Icon name="more" size={18} />
   </div>
   <ul class="dropdown-content menu z-10 w-60 gap-0.5 rounded-box bg-base-100 p-2 shadow-lg">
     <li>
       <button type="button" onclick={() => open('deleteBackups')}>
         <Icon name="trash" size={15} />
-        Delete backups…
+        删除备份……
       </button>
     </li>
     <li>
       <button type="button" class="text-error" onclick={() => open('unpair')}>
         <Icon name="offline" size={15} />
-        Unpair device…
+        取消设备配对……
       </button>
     </li>
     {#if device.paired}
@@ -41,11 +42,11 @@
           type="button"
           class="text-error"
           disabled={device.connection === 'offline'}
-          title={device.connection === 'offline' ? 'Connect the phone (Wi-Fi or USB) to erase it' : undefined}
+          title={device.connection === 'offline' ? "请通过 Wi-Fi 或 USB 连接手机后再抹掉设备" : undefined}
           onclick={() => open('erase')}
         >
           <Icon name="alert" size={15} />
-          Erase iPhone…
+          抹掉 iPhone……
         </button>
       </li>
     {/if}
@@ -54,25 +55,22 @@
 
 {#if action === 'unpair'}
   <ConfirmDialog
-    title={`Unpair ${device.name}?`}
+    title={`取消配对 ${device.name}?`}
     icon="offline"
-    confirmLabel="Unpair"
-    busyLabel="Working…"
+    confirmLabel="取消配对"
+    busyLabel="正在处理……"
     failureCode="device_action_failed"
     onconfirm={() => unpair(device.udid, alsoDelete)}
     onclose={() => (action = null)}
   >
     <p class="py-3 text-sm text-base-content/70">
-      The iPhone is told to forget this AirVault host, and the device is removed from AirVault
-      either way. If it can't be reached right now, clear the trust on the phone later via
-      Settings → General → Transfer or Reset → Reset Location &amp; Privacy. To back it up
-      again, you'll pair over USB from scratch.
+      AirVault 会请求 iPhone 忘记此主机，并从设备列表中移除该设备。如果手机当前无法连接，之后请在手机“设置 → 通用 → 传输或还原 iPhone → 还原 → 还原位置与隐私”中清除信任。再次备份前需要通过 USB 重新配对。
     </p>
     <label class="label cursor-pointer gap-3 rounded-box bg-base-200 p-3">
       <input type="checkbox" class="checkbox checkbox-sm checkbox-error" bind:checked={alsoDelete} />
-      <span class="text-sm">
-        Also delete this device's stored backups
-        <span class="text-base-content/60">(can't be undone)</span>
+      <span class="min-w-0 flex-1 whitespace-normal text-sm">
+        同时删除该设备已保存的备份
+        <span class="text-base-content/60">（无法撤销）</span>
       </span>
     </label>
   </ConfirmDialog>
@@ -80,17 +78,16 @@
   <EraseDialog {device} onclose={() => (action = null)} />
 {:else if action === 'deleteBackups'}
   <ConfirmDialog
-    title={`Delete backups of ${device.name}?`}
+    title={`删除备份： ${device.name}?`}
     icon="trash"
-    confirmLabel="Delete backups"
-    busyLabel="Working…"
+    confirmLabel="删除备份"
+    busyLabel="正在处理……"
     failureCode="device_action_failed"
     onconfirm={() => deleteAllBackups(device)}
     onclose={() => (action = null)}
   >
     <p class="py-3 text-sm text-base-content/70">
-      Deletes all restore points for this device. The device stays in AirVault and can be backed up
-      again manually. This can't be undone.
+      将删除该设备的所有恢复点。设备仍保留在 AirVault 中，可再次手动备份。此操作无法撤销。
     </p>
   </ConfirmDialog>
 {/if}

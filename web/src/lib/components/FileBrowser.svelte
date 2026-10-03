@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // The `source` decides capabilities: its optional remove lights up delete. Call
   // sites mount a fresh instance per open, so per-open state resets by remount.
@@ -13,7 +14,7 @@
     source,
     title,
     subtitle,
-    rootLabel = 'Files',
+    rootLabel = "文件",
     onclose,
   }: {
     source: FileSource;
@@ -112,7 +113,7 @@
         <h3 class="truncate text-lg font-bold">{title}</h3>
         <p class="mt-0.5 text-sm text-base-content/60">{subtitle}</p>
       </div>
-      <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="Close" onclick={() => dialog.close()}>
+      <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="关闭" onclick={() => dialog.close()}>
         <Icon name="x" size={16} />
       </button>
     </div>
@@ -124,7 +125,7 @@
       {@const p = preview}
       <div class="flex shrink-0 items-center gap-2">
         <button type="button" class="btn btn-ghost btn-sm shrink-0" onclick={() => (preview = null)}>
-          <Icon name="arrowLeft" size={16} /> Back
+          <Icon name="arrowLeft" size={16} /> 返回
         </button>
         <div class="min-w-0 flex-1">
           <p class="truncate text-sm font-medium">{p.name}</p>
@@ -141,7 +142,7 @@
           {:else}
             <Icon name="download" size={14} />
           {/if}
-          Save
+          保存
         </button>
       </div>
       <div class="flex min-h-0 basis-48 grow shrink items-center justify-center overflow-auto rounded-box bg-base-200 p-2">
@@ -149,7 +150,7 @@
           {#snippet fallback()}
             <div class="p-6 text-center text-sm text-base-content/60">
               <Icon name="alert" size={24} class="mx-auto mb-2 opacity-50" />
-              Couldn't render a preview. Use Save to download the original.
+              无法显示预览，请点击“保存”下载原文件。
             </div>
           {/snippet}
         </PreviewImage>
@@ -170,7 +171,7 @@
         {#if loading}
           <p class="flex items-center gap-2 p-4 text-sm text-base-content/60">
             <span class="loading loading-spinner loading-sm"></span>
-            Asking the phone…
+            正在读取手机……
           </p>
         {:else if error}
           <ErrorLine {error} variant="alert" className="m-3" />
@@ -181,7 +182,7 @@
                 <button
                   type="button"
                   class="flex w-full items-center gap-3 px-4 py-2 text-left"
-                  title="Up one folder"
+                  title="返回上级文件夹"
                   onclick={() => navigate(segments.slice(0, -1).join('/'))}
                 >
                   <Icon name="levelUp" size={18} class="shrink-0 text-base-content/60" />
@@ -205,7 +206,7 @@
                   <button
                     type="button"
                     class="flex min-w-0 flex-1 items-center gap-3 text-left"
-                    title="Preview"
+                    title="预览"
                     onclick={() => (preview = entry)}
                   >
                     <Icon name="image" size={18} class="shrink-0 text-primary/80" />
@@ -235,11 +236,11 @@
                       {#if deleting === entry.name}
                         <span class="loading loading-spinner loading-xs"></span>
                       {:else}
-                        Delete
+                        删除
                       {/if}
                     </button>
                     <button type="button" class="btn btn-ghost btn-xs" onclick={() => (confirmDelete = null)}>
-                      Cancel
+                      取消
                     </button>
                   </div>
                 {:else}
@@ -247,8 +248,8 @@
                     <button
                       type="button"
                       class="btn btn-square btn-ghost btn-xs"
-                      title="Download"
-                      aria-label={`Download ${entry.name}`}
+                      title="下载"
+                      aria-label={`下载 ${entry.name}`}
                       disabled={saving === entry.name}
                       onclick={() => save(entry.name)}
                     >
@@ -262,8 +263,8 @@
                       <button
                         type="button"
                         class="btn btn-square btn-ghost btn-xs"
-                        title="Delete"
-                        aria-label={`Delete ${entry.name}`}
+                        title="删除"
+                        aria-label={`删除 ${entry.name}`}
                         onclick={() => (confirmDelete = entry.name)}
                       >
                         <Icon name="trash" size={15} />
@@ -274,7 +275,7 @@
               </li>
             {/each}
             {#if entries.length === 0}
-              <li class="px-4 py-3 text-sm text-base-content/50">This folder is empty.</li>
+              <li class="px-4 py-3 text-sm text-base-content/50">此文件夹为空。</li>
             {/if}
           </ul>
         {/if}
@@ -282,6 +283,6 @@
     {/if}
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close">close</button>
+    <button aria-label="关闭">关闭</button>
   </form>
 </dialog>

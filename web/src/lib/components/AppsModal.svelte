@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import { onMount, untrack } from 'svelte';
   import { appIcons, cachedAppIcons, installApp, uninstallApp, type DeviceApp, type InstallProgress } from '../api/apps';
@@ -44,11 +45,11 @@
   const installStage = $derived(
     installState
       ? installState.phase === 'staging'
-        ? 'Sending to iPhone'
-        : 'Installing'
+        ? "正在发送到 iPhone"
+        : "正在安装"
       : uploadPct >= 100
-        ? 'Sending to iPhone'
-        : 'Uploading',
+        ? "正在发送到 iPhone"
+        : "正在上传",
   );
   const installIndeterminate = $derived(!installState && uploadPct >= 100);
 
@@ -68,7 +69,7 @@
         (percent) => (uploadPct = percent),
         (progress) => (installState = progress),
       );
-      note = { text: `Installed ${file.name}`, tone: 'ok' };
+      note = { text: `已安装 ${file.name}`, tone: 'ok' };
     } catch (err) {
       note = { text: errMsg(err, 'app_install_failed'), tone: 'error' };
     } finally {
@@ -127,30 +128,30 @@
     <div class="flex shrink-0 flex-col gap-3">
       <div class="flex items-start justify-between gap-3">
         <div>
-          <h3 class="text-lg font-bold">Apps</h3>
-          <p class="mt-0.5 text-sm text-base-content/60">Apps installed on {name}</p>
+          <h3 class="text-lg font-bold">应用</h3>
+          <p class="mt-0.5 text-sm text-base-content/60">已安装应用： {name}</p>
         </div>
-        <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="Close" onclick={() => dialog.close()}>
+        <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="关闭" onclick={() => dialog.close()}>
           <Icon name="x" size={16} />
         </button>
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
         <label class="input input-sm flex-1">
-          <input type="text" placeholder="Search name or bundle id…" bind:value={search} />
+          <input type="text" placeholder="搜索应用名称或标识符……" bind:value={search} />
         </label>
         {#if !loading && !error}
-          <span class="text-xs text-base-content/50">{visible.length} apps</span>
+          <span class="text-xs text-base-content/50">{visible.length} 个应用</span>
         {/if}
         <label
           class={`btn btn-outline btn-sm ${writeBusy ? 'pointer-events-none btn-disabled' : ''}`}
-          title={writeBusy ? 'The device is busy' : 'Install a user-provided .ipa'}
+          title={writeBusy ? "设备正在执行其他操作" : "安装你提供的 .ipa 文件"}
         >
           {#if installing}
             <span class="loading loading-spinner loading-xs"></span>
-            Installing
+            正在安装
           {:else}
-            <Icon name="upload" size={14} /> Install .ipa…
+            <Icon name="upload" size={14} /> 安装 .ipa……
           {/if}
           <input type="file" accept=".ipa" class="hidden" disabled={writeBusy} onchange={handleInstall} />
         </label>
@@ -166,12 +167,12 @@
           {#if installIndeterminate}
             <progress
               class="progress progress-primary w-full"
-              aria-label={`${installStage} application`}
+              aria-label={`${installStage}应用`}
             ></progress>
           {:else}
             <progress
               class="progress progress-primary w-full"
-              aria-label={`${installStage} application: ${installPct}%`}
+              aria-label={`${installStage}应用：${installPct}%`}
               value={installPct}
               max="100"
             ></progress>
@@ -193,13 +194,13 @@
       {#if loading}
         <p class="flex items-center gap-2 p-4 text-sm text-base-content/60">
           <span class="loading loading-spinner loading-sm"></span>
-          Asking the phone…
+          正在读取手机……
         </p>
       {:else if error}
         <ErrorLine {error} variant="alert" className="m-3" />
       {:else if visible.length === 0}
         <p class="p-4 text-sm text-base-content/50">
-          {search ? 'Nothing matches the search' : 'No apps reported'}
+          {search ? "没有匹配的应用" : "未读取到应用"}
         </p>
       {:else}
         <ul class="divide-y divide-base-300/60">
@@ -231,8 +232,8 @@
                     type="button"
                     class="btn btn-square btn-ghost btn-xs"
                     disabled={readBusy}
-                    title={readBusy ? 'The device is busy' : 'Browse files'}
-                    aria-label={`Browse ${app.name} files`}
+                    title={readBusy ? "设备正在执行其他操作" : "浏览文件"}
+                    aria-label={`浏览 ${app.name} 文件`}
                     onclick={() => (filesApp = app)}
                   >
                     <Icon name="folder" size={15} />
@@ -248,19 +249,19 @@
                     {#if uninstalling === app.bundleId}
                       <span class="loading loading-spinner loading-xs"></span>
                     {:else}
-                      Remove
+                      移除
                     {/if}
                   </button>
                   <button type="button" class="btn btn-ghost btn-xs" disabled={uninstalling !== null} onclick={() => (confirmUninstall = null)}>
-                    Cancel
+                    取消
                   </button>
                 {:else}
                   <button
                     type="button"
                     class="btn btn-square btn-ghost btn-xs"
                     disabled={writeBusy}
-                    title={writeBusy ? 'The device is busy' : 'Uninstall'}
-                    aria-label={`Uninstall ${app.name}`}
+                    title={writeBusy ? "设备正在执行其他操作" : "卸载"}
+                    aria-label={`卸载 ${app.name}`}
                     onclick={() => (confirmUninstall = app.bundleId)}
                   >
                     <Icon name="trash" size={15} />
@@ -274,16 +275,16 @@
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close">close</button>
+    <button aria-label="关闭">关闭</button>
   </form>
 </dialog>
 
 {#if filesApp && filesSource}
   <FileBrowser
     source={filesSource}
-    title={`Files — ${filesApp.name}`}
-    subtitle="The app's Documents folder on the device"
-    rootLabel="Documents"
+    title={`文件 — ${filesApp.name}`}
+    subtitle="设备上此应用的 Documents 文件夹"
+    rootLabel="文稿"
     onclose={() => (filesApp = null)}
   />
 {/if}

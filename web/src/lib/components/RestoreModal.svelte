@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // The card is the run's surface (progress via SSE, failures via the server's
   // last-restore-error); only errors of the start request itself show inline,
@@ -58,7 +59,7 @@
   const phones = $derived.by(() => {
     const byUdid = new Map<string, string>();
     for (const s of sources) {
-      if (!byUdid.has(s.udid)) byUdid.set(s.udid, s.udid === udid ? 'This phone' : s.deviceName || shortUdid(s.udid));
+      if (!byUdid.has(s.udid)) byUdid.set(s.udid, s.udid === udid ? "这台手机" : s.deviceName || shortUdid(s.udid));
     }
     return [...byUdid]
       .map(([id, name]) => ({ udid: id, name }))
@@ -106,7 +107,7 @@
       `${formatDateTime(s.created)} (${relativeTime(s.created)})`,
       s.sizeBytes ? formatBytes(s.sizeBytes) : '',
       s.iosVersion ? `iOS ${s.iosVersion}` : '',
-      s.encrypted ? 'encrypted' : '',
+      s.encrypted ? '已加密' : '',
     ].filter(Boolean);
     return parts.join(' · ');
   }
@@ -148,34 +149,34 @@
   {onclose}
 >
   <div class="modal-box flex max-h-[85vh] max-w-2xl flex-col overflow-hidden">
-    <h3 class="shrink-0 text-lg font-bold">Restore {name}?</h3>
+    <h3 class="shrink-0 text-lg font-bold">恢复 {name}？</h3>
 
     <!-- Content-height card would jump as warnings/options appear; a scrollable
          middle keeps the box stable like the Files/Apps modals. -->
     <div class="-mx-1 min-h-0 flex-1 overflow-auto px-1">
     <div class="mt-3 flex flex-col gap-3">
       <label class="flex flex-col gap-1.5">
-        <span class="label">Restore from</span>
+        <span class="label">备份来源设备</span>
         <select
           class="select w-full"
           bind:value={selectedUdid}
           disabled={busy}
           onchange={() => (selected = '')}
         >
-          <option value="" disabled>Select a phone…</option>
+          <option value="" disabled>请选择来源设备……</option>
           {#each phones as p (p.udid)}
             <option value={p.udid}>{p.name}</option>
           {/each}
         </select>
       </label>
       <label class="flex flex-col gap-1.5">
-        <span class="label">Backup</span>
+        <span class="label">备份</span>
         <select
           class="select w-full"
           bind:value={selected}
           disabled={busy || selectedUdid === ''}
         >
-          <option value="" disabled>{selectedUdid === '' ? 'Choose a phone first' : 'Select a backup…'}</option>
+          <option value="" disabled>{selectedUdid === '' ? "请先选择来源设备" : "请选择备份……"}</option>
           {#each points as s (s.snapshotId)}
             <option value={s.snapshotId}>{backupLabel(s)}</option>
           {/each}
@@ -186,11 +187,11 @@
     {#if sel?.encrypted}
       <PasswordField
         className="mt-3"
-        label="Backup password"
+        label="备份密码"
         bind:value={password}
-        placeholder="Required — the backup is encrypted"
+        placeholder="备份已加密，必须输入密码"
         disabled={busy}
-        error={wrongPassword ? 'That password does not unlock the selected backup. Try again.' : null}
+        error={wrongPassword ? "密码无法解锁所选备份，请重试。" : null}
         focus={wrongPassword}
       />
     {/if}
@@ -203,16 +204,14 @@
       <div role="alert" class="alert alert-warning alert-soft mt-3">
         <Icon name="alert" size={18} />
         <span class="text-sm">
-          <span class="font-medium">{name}</span> receives the backup of
-          <span class="font-medium">{sel?.deviceName || 'another phone'}</span>
+          <span class="font-medium">{name}</span> 将接收以下设备的备份：
+          <span class="font-medium">{sel?.deviceName || "另一台手机"}</span>
         </span>
       </div>
       <div class="mt-2 rounded-box bg-base-200 p-3 text-xs text-base-content/70">
-        <p class="font-medium text-base-content/80">Moving to this phone</p>
+        <p class="font-medium text-base-content/80">迁移到这台手机</p>
         <p class="mt-1">
-          A new phone can be paired right from the setup assistant — on the
-          “Apps &amp; Data” screen, choose “Restore from Mac or PC” and connect
-          the cable
+          新手机可在设置向导中直接配对：在“App 与数据”界面选择“从 Mac 或 PC 恢复”，然后连接数据线。
         </p>
       </div>
     {/if}
@@ -221,7 +220,7 @@
       <div role="alert" class="alert alert-warning alert-soft mt-3">
         <Icon name="alert" size={18} />
         <p class="text-sm">
-          This phone isn't activated yet — it will be activated as the first step
+          这台手机尚未激活，恢复前会先尝试激活
         </p>
       </div>
     {/if}
@@ -230,8 +229,8 @@
       <div role="alert" class="alert alert-error alert-soft mt-3">
         <Icon name="alert" size={18} />
         <p class="text-sm">
-          This backup was made on iOS {sel?.iosVersion}, newer than the phone's iOS
-          {iosVersion} — update the phone first.
+          此备份创建时的系统为 iOS {sel?.iosVersion}，高于手机当前的 iOS
+          {iosVersion} ，请先更新手机系统。
         </p>
       </div>
     {/if}
@@ -240,56 +239,55 @@
       <div role="alert" class="alert alert-error alert-soft mt-3">
         <Icon name="alert" size={18} />
         <p class="text-sm">
-          The backup ({formatBytes(sel.sizeBytes)}) is larger than the phone's total storage
-          ({formatBytes(capacityBytes)}) — the restore will not fit on this phone.
+          备份大小（{formatBytes(sel.sizeBytes)}）超过手机总容量（{formatBytes(capacityBytes)}），无法恢复到这台手机。
         </p>
       </div>
     {/if}
 
     <details class="collapse collapse-arrow mt-3 border border-base-300 bg-base-100">
       <summary class="collapse-title flex items-center justify-between gap-3 pr-10 font-medium">
-        <span>Advanced restore options</span>
+        <span>高级恢复选项</span>
         <span class="text-sm font-normal {overrideCount === 0 ? 'text-base-content/60' : 'text-warning'}">
-          {overrideCount === 0 ? 'Default' : `${overrideCount} ${overrideCount === 1 ? 'change' : 'changes'}`}
+          {overrideCount === 0 ? '默认' : `${overrideCount} 项修改`}
         </span>
       </summary>
       <div class="collapse-content flex flex-col gap-2">
         <p class="text-xs text-base-content/60">
-          Default restores settings and system files, removes items outside the backup, and restarts the phone
+          默认恢复设置和系统文件，移除不在备份中的内容，并重启手机
         </p>
         <label class="label cursor-pointer gap-3 rounded-box bg-base-200 p-3">
           <input type="checkbox" class="checkbox checkbox-sm" bind:checked={keepCurrentSettings} disabled={busy} />
-          <span class="text-sm leading-snug">
-            <span>Keep current settings</span>
+          <span class="min-w-0 flex-1 whitespace-normal text-sm leading-snug">
+            <span>保留当前设置</span>
             <span class="mt-0.5 block text-xs text-base-content/60">
-              Keep the phone's settings, not the backup's
+              保留手机现有设置，不应用备份中的设置
             </span>
           </span>
         </label>
         <label class="label cursor-pointer gap-3 rounded-box bg-base-200 p-3">
           <input type="checkbox" class="checkbox checkbox-sm" bind:checked={skipSystemFiles} disabled={busy} />
-          <span class="text-sm leading-snug">
-            <span>Skip system files</span>
+          <span class="min-w-0 flex-1 whitespace-normal text-sm leading-snug">
+            <span>跳过系统文件</span>
             <span class="mt-0.5 block text-xs text-base-content/60">
-              Do not restore system-level files stored in the backup
+              不恢复备份中的系统级文件
             </span>
           </span>
         </label>
         <label class="label cursor-pointer gap-3 rounded-box bg-base-200 p-3">
           <input type="checkbox" class="checkbox checkbox-sm" bind:checked={keepItemsNotInBackup} disabled={busy} />
-          <span class="text-sm leading-snug">
-            <span>Keep items not in the backup</span>
+          <span class="min-w-0 flex-1 whitespace-normal text-sm leading-snug">
+            <span>保留备份之外的内容</span>
             <span class="mt-0.5 block text-xs text-base-content/60">
-              Merge backup data with existing phone content
+              将备份数据与手机现有内容合并
             </span>
           </span>
         </label>
         <label class="label cursor-pointer gap-3 rounded-box bg-base-200 p-3">
           <input type="checkbox" class="checkbox checkbox-sm" bind:checked={doNotRestart} disabled={busy} />
-          <span class="text-sm leading-snug">
-            <span>Do not restart</span>
+          <span class="min-w-0 flex-1 whitespace-normal text-sm leading-snug">
+            <span>不自动重启</span>
             <span class="mt-0.5 block text-xs text-base-content/60">
-              Restart the phone manually after the restore
+              恢复后需要手动重启手机
             </span>
           </span>
         </label>
@@ -298,7 +296,7 @@
 
     <p class="mt-3 flex items-center gap-1.5 text-xs text-base-content/60">
       <Icon name="info" size={13} />
-      Apps from the backup re-download from the App Store
+      备份中的应用将从 App Store 重新下载
     </p>
 
     {#if !wrongPassword}
@@ -307,7 +305,7 @@
     </div>
 
     <div class="modal-action shrink-0">
-      <button type="button" class="btn btn-ghost" disabled={busy} onclick={() => dialog.close()}>Cancel</button>
+      <button type="button" class="btn btn-ghost" disabled={busy} onclick={() => dialog.close()}>取消</button>
       <button
         type="button"
         class="btn btn-error"
@@ -316,17 +314,17 @@
       >
         {#if busy}
           <span class="loading loading-spinner loading-xs"></span>
-          Starting…
+          正在启动……
         {:else if failure}
-          <Icon name="backup" size={15} /> Try restore again
+          <Icon name="backup" size={15} /> 重试恢复
         {:else}
           <Icon name="backup" size={15} />
-          Restore
+          恢复
         {/if}
       </button>
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close" disabled={busy}>close</button>
+    <button aria-label="关闭" disabled={busy}>关闭</button>
   </form>
 </dialog>

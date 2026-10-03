@@ -1,3 +1,4 @@
+// Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later.
 import type { RunningProgress, RunStage } from './api/backups';
 import type { AutoBackupDays, AutoBackupState, BatteryState, Connection, Device } from './api/devices';
 import type { IconName } from './components/icons';
@@ -14,8 +15,8 @@ export function lastBackupFailure(device: Device, live: RunningProgress | null):
 
 /** Why a device action that needs the phone to itself is disabled, if it is. */
 export function blockedReason(device: Device, live: RunningProgress | null): string | null {
-  if (device.connection === 'offline') return 'Device is offline';
-  return live ? 'Another operation is running on this phone' : null;
+  if (device.connection === 'offline') return "设备离线";
+  return live ? "这台手机正在执行其他操作" : null;
 }
 
 /** The IANA zone this browser runs in. */
@@ -24,9 +25,9 @@ export function browserTimeZone(): string {
 }
 
 export const AUTO_BACKUP_EVERY: Record<AutoBackupDays, string> = {
-  1: 'Every day',
-  3: 'Every 3 days',
-  7: 'Every week',
+  1: "每天",
+  3: "每 3 天",
+  7: "每周",
 };
 
 /** The automatic-backup schedule and when the next one can start (`at` is
@@ -39,11 +40,11 @@ export function autoBackupStatus(
   const window = auto.window;
   let schedule = AUTO_BACKUP_EVERY[auto.everyDays];
   if (window) {
-    schedule += `, ${window.start}–${window.end}`;
+    schedule += `，${window.start}–${window.end}`;
     if (auto.timeZone !== browserTimeZone()) schedule += ` (${auto.timeZone})`;
   }
   if (auto.wait === 'first_backup') {
-    return { schedule, next: 'Starts after the first backup — run it with Back up now' };
+    return { schedule, next: "首次备份后生效，请先点击“立即备份”" };
   }
   // The projection is as old as the last device refetch; a wait that has run
   // out since then is over.
@@ -52,15 +53,15 @@ export function autoBackupStatus(
     const when = relativeTime(at, now);
     switch (auto.wait) {
       case 'paused':
-        return { schedule, at, next: `Paused after an unfinished attempt — resumes ${when}` };
+        return { schedule, at, next: `上次备份未完成，已暂停，将于${when}恢复` };
       case 'limit':
-        return { schedule, at, next: `Paused after repeated unfinished attempts — resumes ${when}` };
+        return { schedule, at, next: `多次备份未完成，已暂停，将于${when}恢复` };
       case 'schedule':
-        return { schedule, at, next: `Next ${when}` };
+        return { schedule, at, next: `下次备份：${when}` };
     }
   }
-  const inWindow = window ? ` between ${window.start} and ${window.end}` : '';
-  return { schedule, next: `Due — starts on the next unlock at home${inWindow}` };
+  const inWindow = window ? `（${window.start} 至 ${window.end}）` : '';
+  return { schedule, next: `已到备份时间，下次在家中解锁手机时启动${inWindow}` };
 }
 
 export function connectionUi(c: Connection): { tone: Tone; label: string; icon: IconName } {
@@ -70,7 +71,7 @@ export function connectionUi(c: Connection): { tone: Tone; label: string; icon: 
     case 'usb':
       return { tone: 'amber', label: 'USB', icon: 'usb' };
     default:
-      return { tone: 'slate', label: 'Offline', icon: 'offline' };
+      return { tone: 'slate', label: "离线", icon: 'offline' };
   }
 }
 
@@ -105,7 +106,7 @@ export function batteryUi(
     icon,
     cls,
     label: `${level}%`,
-    title: b.charging ? `Battery ${level}% · charging` : `Battery ${level}%`,
+    title: b.charging ? `电量 ${level}% · 正在充电` : `电量 ${level}%`,
   };
 }
 
@@ -359,20 +360,20 @@ function isTablet(productType?: string): boolean {
 /** An ellipsis marks a phase the progress bar cannot measure. Record, not a
  *  switch: a stage added to RunStage without a label stops compiling. */
 const STAGE_LABELS: Record<RunStage, string> = {
-  waiting_for_device: 'Waiting for the phone to come online…',
-  preparing: 'Preparing on the phone…',
-  activating: 'Activating the phone…',
-  calculating_changes: 'Calculating changes on the phone…',
-  backing_up: 'Backing up',
-  finalizing: 'Finalizing the backup locally…',
-  restoring: 'Restoring',
-  cancelling_backup: 'Cancelling…',
-  cancelling_restore: 'Cancelling…',
-  verifying: 'Checking the stored backups',
-  cancelling_verify: 'Cancelling…',
+  waiting_for_device: "正在等待手机连接……",
+  preparing: "正在手机上准备备份……",
+  activating: "正在激活手机……",
+  calculating_changes: "正在计算手机上的数据变化……",
+  backing_up: "正在备份",
+  finalizing: "正在服务器上完成备份……",
+  restoring: "正在恢复",
+  cancelling_backup: "正在取消……",
+  cancelling_restore: "正在取消……",
+  verifying: "正在校验已保存的备份",
+  cancelling_verify: "正在取消……",
 };
 
 /** A server ahead of this client can name a stage it has no label for. */
 export function stageUi(stage: RunStage | undefined, restore?: boolean): string {
-  return (stage && STAGE_LABELS[stage]) || (restore ? 'Restoring…' : 'Backing up…');
+  return (stage && STAGE_LABELS[stage]) || (restore ? "正在恢复……" : "正在备份……");
 }

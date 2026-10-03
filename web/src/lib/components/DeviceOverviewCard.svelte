@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import { errMsg } from '../api/client';
   import { powerDevice, type Device } from '../api/devices';
@@ -42,8 +43,8 @@
       tone: 'info',
       text:
         action === 'restart'
-          ? 'Restarting — the phone drops offline and comes back in a couple of minutes'
-          : 'Shutting down — plug it into power or a computer to turn it back on',
+          ? "正在重启，手机将暂时离线，几分钟后重新连接"
+          : "正在关机，可连接电源或电脑使手机重新开机",
     };
   }
 
@@ -51,7 +52,7 @@
     (document.activeElement as HTMLElement | null)?.blur();
     try {
       await powerDevice(device.udid, 'sleep');
-      controlNotice = { tone: 'info', text: 'Asked the phone to sleep' };
+      controlNotice = { tone: 'info', text: "已请求手机锁屏" };
     } catch (error) {
       controlNotice = { tone: 'error', text: errMsg(error, 'sleep_request_failed') };
     }
@@ -83,11 +84,11 @@
               <span class="select-all break-all font-mono text-xs" title="UDID">{device.udid}</span>
             </p>
             <div class="mt-1.5">
-              <Badge label="Paired" offLabel="Not paired" icon="shield" on={device.paired} />
+              <Badge label="已配对" offLabel="未配对" icon="shield" on={device.paired} />
             </div>
             {#if device.connection === 'offline' && device.lastSeen}
               <p class="mt-1 text-xs text-base-content/50" title={formatDateTime(device.lastSeen)}>
-                Last seen {relativeTime(device.lastSeen, $now)}
+                上次连接于 {relativeTime(device.lastSeen, $now)}
               </p>
             {/if}
           </div>
@@ -101,51 +102,51 @@
             class="btn btn-ghost btn-sm"
             disabled={!reachable}
             onclick={() => (consoleOpen = true)}
-            title={!reachable ? 'Device is offline' : 'Open the live system log'}
+            title={!reachable ? "设备离线" : "打开实时系统日志"}
           >
-            <Icon name="terminal" size={14} /> Console
+            <Icon name="terminal" size={14} /> 日志
           </button>
           <button
             type="button"
             class="btn btn-ghost btn-sm"
             disabled={!reachable}
             onclick={() => (appsOpen = true)}
-            title={!reachable ? 'Device is offline' : 'List installed applications'}
+            title={!reachable ? "设备离线" : "查看已安装的应用"}
           >
-            <Icon name="apps" size={14} /> Apps
+            <Icon name="apps" size={14} /> 应用
           </button>
           <button
             type="button"
             class="btn btn-ghost btn-sm"
             disabled={!reachable || restoreRunning}
             onclick={() => (filesOpen = true)}
-            title={!reachable ? 'Device is offline' : restoreRunning ? 'A restore is running' : 'Browse files on the device'}
+            title={!reachable ? "设备离线" : restoreRunning ? "正在恢复" : "浏览设备文件"}
           >
-            <Icon name="folder" size={14} /> Files
+            <Icon name="folder" size={14} /> 文件
           </button>
           <button
             type="button"
             class="btn btn-ghost btn-sm"
             disabled={!reachable || restoreRunning}
             onclick={() => (galleryOpen = true)}
-            title={!reachable ? 'Device is offline' : restoreRunning ? 'A restore is running' : 'Browse the camera roll'}
+            title={!reachable ? "设备离线" : restoreRunning ? "正在恢复" : "浏览照片和视频"}
           >
-            <Icon name="image" size={14} /> Media
+            <Icon name="image" size={14} /> 媒体
           </button>
           {#if powerBlocked}
             <button type="button" class="btn btn-ghost btn-sm" disabled title={powerBlocked}>
-              <Icon name="power" size={14} /> Power
+              <Icon name="power" size={14} /> 电源
             </button>
           {:else}
             <div class="dropdown dropdown-end">
-              <div tabindex="0" role="button" class="btn btn-ghost btn-sm" title="Power actions">
-                <Icon name="power" size={14} /> Power
+              <div tabindex="0" role="button" class="btn btn-ghost btn-sm" title="电源操作">
+                <Icon name="power" size={14} /> 电源
               </div>
               <ul class="dropdown-content menu z-10 w-48 gap-0.5 rounded-box bg-base-100 p-2 shadow-lg">
-                <li><button type="button" onclick={() => (powerAsked = 'restart')}>Restart…</button></li>
-                <li><button type="button" onclick={sleepDevice}>Sleep</button></li>
+                <li><button type="button" onclick={() => (powerAsked = 'restart')}>重启……</button></li>
+                <li><button type="button" onclick={sleepDevice}>锁屏</button></li>
                 <li>
-                  <button type="button" class="text-error" onclick={() => (powerAsked = 'shutdown')}>Shut down…</button>
+                  <button type="button" class="text-error" onclick={() => (powerAsked = 'shutdown')}>关机……</button>
                 </li>
               </ul>
             </div>
@@ -173,9 +174,9 @@
 {#if filesOpen}
   <FileBrowser
     source={mediaFiles}
-    title={`Files — ${device.name}`}
-    subtitle="Photos, videos and files on the device (DCIM, Recordings, …)"
-    rootLabel="Files"
+    title={`文件 — ${device.name}`}
+    subtitle="设备上的照片、视频和文件（DCIM、Recordings 等）"
+    rootLabel="文件"
     onclose={() => (filesOpen = false)}
   />
 {/if}
@@ -187,10 +188,10 @@
   {@const action = powerAsked}
   {@const restart = action === 'restart'}
   <ConfirmDialog
-    title={restart ? `Restart ${device.name}?` : `Shut down ${device.name}?`}
+    title={restart ? `重启 ${device.name}?` : `关机 ${device.name}?`}
     icon="power"
-    confirmLabel={restart ? 'Restart' : 'Shut down'}
-    busyLabel="Asking…"
+    confirmLabel={restart ? "重启" : "关机"}
+    busyLabel="正在请求……"
     confirmClass={restart ? 'btn-warning' : 'btn-error'}
     failureCode="power_request_failed"
     onconfirm={() => power(action)}
@@ -198,11 +199,9 @@
   >
     <p class="py-3 text-sm text-base-content/70">
       {#if restart}
-        The phone reboots immediately and drops offline for a couple of minutes. Unsaved state in open apps may be lost —
-        exactly like holding the power button.
+        手机将立即重启，并离线几分钟。正在使用的应用中未保存的内容可能丢失。
       {:else}
-        The phone powers off and stays offline until it's turned back on by hand (or plugged into power). Remote backups
-        stop until then.
+        手机将关机，直到手动开机或连接电源后才重新上线。在此期间无法进行远程备份。
       {/if}
     </p>
   </ConfirmDialog>

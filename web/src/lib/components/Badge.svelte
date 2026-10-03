@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import Icon from './Icon.svelte';
   import type { IconName } from './icons';
@@ -16,7 +17,7 @@
 </script>
 
 <span
-  title={on ? label : (offLabel ?? `${label}: off`)}
+  title={on ? label : (offLabel ?? `${label}：已关闭`)}
   class={`badge badge-sm gap-1 ${on ? 'badge-soft badge-primary' : 'badge-ghost'}`}
 >
   <Icon name={on ? icon : 'x'} size={12} stroke={2} />

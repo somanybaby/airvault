@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // Capture fills a capped ring; the level and text filters decide what the view
   // shows and what eviction spares. As in Console.app and Logcat, Pause stops the
@@ -169,48 +170,48 @@
       <div>
         <h3 class="flex items-center gap-2 text-lg font-bold">
           <Icon name="terminal" size={18} />
-          Console
+          日志
           {#if connected || paused}
             <span
               class={`status ${paused ? 'status-warning' : 'status-success'}`}
-              title={paused ? 'Paused' : 'Streaming'}
+              title={paused ? "已暂停" : "实时读取中"}
             ></span>
           {/if}
         </h3>
         <p class="mt-0.5 text-sm text-base-content/60">
-          Live system log of {name}
+          实时系统日志： {name}
         </p>
       </div>
-      <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="Close" onclick={() => dialog.close()}>
+      <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="关闭" onclick={() => dialog.close()}>
         <Icon name="x" size={16} />
       </button>
     </div>
 
     <div class="flex flex-wrap items-center gap-2">
       <label class="input input-sm w-full sm:w-auto sm:min-w-40 sm:flex-1">
-        <input type="text" placeholder="Filter message / process / subsystem…" bind:value={filter} />
+        <input type="text" placeholder="筛选消息、进程或子系统……" bind:value={filter} />
         {#if filter}
-          <button type="button" class="btn btn-circle btn-ghost btn-xs" aria-label="Clear filter" onclick={() => (filter = '')}>
+          <button type="button" class="btn btn-circle btn-ghost btn-xs" aria-label="清除筛选" onclick={() => (filter = '')}>
             <Icon name="x" size={12} />
           </button>
         {/if}
       </label>
-      <select class="select select-sm w-32 sm:w-36" bind:value={minLevel} aria-label="Level filter">
-        <option value="all">All levels</option>
-        <option value="notice">Notice &amp; up</option>
-        <option value="errors">Errors only</option>
+      <select class="select select-sm w-32 sm:w-36" bind:value={minLevel} aria-label="日志级别筛选">
+        <option value="all">所有级别</option>
+        <option value="notice">通知及以上</option>
+        <option value="errors">仅错误</option>
       </select>
       <button
         type="button"
         class={`btn btn-sm ${paused ? 'btn-warning' : 'btn-ghost'}`}
         onclick={togglePause}
-        title={paused ? 'Resume the log stream from the phone' : 'Stop the log stream from the phone'}
+        title={paused ? "继续读取手机实时日志" : "暂停读取手机实时日志"}
       >
         <Icon name={paused ? 'play' : 'pause'} size={13} />
-        <span class="hidden sm:inline">{paused ? 'Resume' : 'Pause'}</span>
+        <span class="hidden sm:inline">{paused ? "继续" : "暂停"}</span>
       </button>
-      <button type="button" class="btn btn-ghost btn-sm" title="Clear the buffered output" onclick={clear}>
-        <Icon name="trash" size={13} /> <span class="hidden sm:inline">Clear</span>
+      <button type="button" class="btn btn-ghost btn-sm" title="清空已缓存的日志" onclick={clear}>
+        <Icon name="trash" size={13} /> <span class="hidden sm:inline">清空</span>
       </button>
     </div>
 
@@ -220,7 +221,7 @@
         <span class="text-sm">{streamError}</span>
         <button type="button" class="btn btn-ghost btn-xs" onclick={() => (streamNonce += 1)}>
           <Icon name="refresh" size={12} />
-          Reconnect
+          重新连接
         </button>
       </div>
     {/if}
@@ -234,12 +235,12 @@
         {#if visible.length === 0}
           <p class="flex items-center gap-2 font-sans text-sm text-base-content/50">
             {#if filtered}
-              No records match the filters.
+              没有符合筛选条件的日志。
             {:else if paused}
-              Paused.
+              已暂停。
             {:else}
               <span class="loading loading-dots loading-xs"></span>
-              Waiting for log output…
+              正在等待日志输出……
             {/if}
           </p>
         {:else}
@@ -258,21 +259,20 @@
           class="btn btn-neutral btn-sm absolute bottom-3 right-5 shadow"
           onclick={() => (following = true)}
         >
-          <Icon name="arrowDown" size={13} /> Latest
+          <Icon name="arrowDown" size={13} /> 最新
         </button>
       {/if}
     </div>
 
     <p class="text-xs text-base-content/40">
       {#if filtered}
-        {visible.length.toLocaleString()} of {lines.length.toLocaleString()} buffered records match —
-        matching records are kept longest, the rest are dropped first.
+        {visible.length.toLocaleString()} ，共 {lines.length.toLocaleString()} 条缓存日志匹配；优先保留匹配项，其他记录将先被丢弃。
       {:else}
-        Keeps the last {MAX_LINES.toLocaleString()} records; older output is dropped.
+        保留最近 {MAX_LINES.toLocaleString()} 条日志，更早的记录将被丢弃。
       {/if}
     </p>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close">close</button>
+    <button aria-label="关闭">关闭</button>
   </form>
 </dialog>

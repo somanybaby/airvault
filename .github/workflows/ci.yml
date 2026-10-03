@@ -1,3 +1,5 @@
+# Modified by somanybaby on 2026-10-03: run upstream checks for the zh-CN branch.
+# See NOTICE.md; GPL-3.0-or-later.
 name: CI
 
 on:
@@ -7,9 +9,9 @@ on:
         type: boolean
         default: false
   push:
-    branches: [main]
+    branches: [main, zh-CN]
   pull_request:
-    branches: [main]
+    branches: [main, zh-CN]
 
 permissions:
   contents: read

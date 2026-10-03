@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import Router, { router } from 'svelte-spa-router';
   import Nav from './lib/components/Nav.svelte';
@@ -33,7 +34,7 @@
     <div class="mx-auto w-full max-w-6xl px-4 pt-4 sm:px-6">
       <div role="alert" class="alert alert-warning alert-soft">
         <Icon name="offline" size={16} stroke={2} />
-        <span>Can't reach the AirVault backend. Retrying automatically&hellip;</span>
+        <span>无法连接 AirVault 服务，正在自动重试……</span>
       </div>
     </div>
   {/if}
@@ -43,8 +44,12 @@
   </main>
 
   <footer class="border-t border-base-300">
-    <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-4 py-4 text-xs text-base-content/60 sm:px-6">
-      <span>AirVault · self-hosted iPhone backups</span>
+    <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-4 text-xs text-base-content/60 sm:px-6">
+      <span>AirVault · 中文社区版 · 自托管 iPhone 备份</span>
+      <span class="flex items-center gap-2">
+        <a class="link link-hover" href="https://github.com/somanybaby/airvault/tree/zh-CN" target="_blank" rel="noopener noreferrer">源码</a>
+        <a class="link link-hover" href="https://github.com/somanybaby/airvault/blob/zh-CN/NOTICE.md" target="_blank" rel="noopener noreferrer">GPLv3+ · 无担保</a>
+      </span>
       <span>{appVersion}</span>
     </div>
   </footer>

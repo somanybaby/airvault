@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // Failed attempts are runtime events; this list holds only completed restore
   // points that still exist.
@@ -93,8 +94,8 @@
 
   function damageText(point: RestorePoint): string {
     return point.damage === 'manifest_unreadable'
-      ? 'Its list of files no longer reads; it can only be deleted'
-      : `${point.damagedFiles ?? 0} of its files no longer read from disk; it can only be deleted`;
+      ? "文件清单无法读取，此恢复点只能删除"
+      : `${point.damagedFiles ?? 0} 个文件无法从磁盘读取，此恢复点只能删除`;
   }
 
   async function download(snapshotId: string): Promise<void> {
@@ -112,7 +113,7 @@
 
 <section class="flex flex-col gap-3">
   <div class="flex min-h-6 items-center justify-between gap-2">
-    <h2 class="text-xs font-semibold uppercase tracking-wide text-base-content/50">Restore points</h2>
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-base-content/50">恢复点</h2>
     {#if pointsLoaded && restorePoints.length > 0}
       <div class="flex items-center gap-2">
         {#if selecting}
@@ -121,15 +122,15 @@
             class="btn btn-error btn-xs"
             disabled={isRunning || selectedPoints.length === 0}
             onclick={() => askDelete(selectedPoints)}
-            title={isRunning ? 'Another operation is running on this phone' : 'Delete the selected restore points'}
+            title={isRunning ? "这台手机正在执行其他操作" : "删除选中的恢复点"}
           >
             <Icon name="trash" size={13} />
-            Delete selected ({selectedPoints.length})
+            删除所选（{selectedPoints.length}）
           </button>
-          <button type="button" class="btn btn-ghost btn-xs" onclick={stopSelecting}>Cancel</button>
+          <button type="button" class="btn btn-ghost btn-xs" onclick={stopSelecting}>取消</button>
         {:else}
           <button type="button" class="btn btn-ghost btn-xs" onclick={() => (selecting = true)}>
-            Select
+            选择
           </button>
         {/if}
       </div>
@@ -142,10 +143,10 @@
   {:else if !pointsLoaded}
     <div class="flex items-center gap-3 rounded-box bg-base-100 p-4 text-sm text-base-content/60 shadow-sm">
       <span class="loading loading-spinner loading-sm"></span>
-      Loading restore points…
+      正在加载恢复点……
     </div>
   {:else if restorePoints.length === 0}
-    <EmptyState icon="clock" title="No restore points yet" message="Completed backups will appear here" />
+    <EmptyState icon="clock" title="暂无恢复点" message="完成的备份将显示在这里" />
   {:else}
     <div class="card overflow-x-auto bg-base-100 shadow-sm">
       <table class="table table-sm">
@@ -157,14 +158,14 @@
                   type="checkbox"
                   class="checkbox checkbox-xs"
                   checked={allSelected}
-                  aria-label="Select all restore points on this page"
+                  aria-label="选择本页所有恢复点"
                   onchange={(event) => toggleAll(event.currentTarget.checked)}
                 />
               </th>
             {/if}
-            <th>Created</th>
-            <th class="hidden sm:table-cell">Duration</th>
-            <th>Size</th>
+            <th>创建时间</th>
+            <th class="hidden sm:table-cell">耗时</th>
+            <th>大小</th>
             <th class="w-0"></th>
           </tr>
         </thead>
@@ -177,7 +178,7 @@
                     type="checkbox"
                     class="checkbox checkbox-xs"
                     checked={selected.has(point.snapshotId)}
-                    aria-label="Select restore point"
+                    aria-label="选择恢复点"
                     onchange={() =>
                       selected.has(point.snapshotId)
                         ? selected.delete(point.snapshotId)
@@ -189,7 +190,7 @@
                 {relativeTime(point.created, $now)}
                 {#if point.damage}
                   <span class="tooltip tooltip-error ml-1" data-tip={damageText(point)}>
-                    <Pill tone="red" dot>Damaged</Pill>
+                    <Pill tone="red" dot>已损坏</Pill>
                   </span>
                 {/if}
               </td>
@@ -197,8 +198,8 @@
               <td class="font-mono text-xs text-base-content/60">
                 <div>{formatBytes(point.sizeBytes)}</div>
                 {#if point.transferredBytes !== null}
-                  <div class="text-[10px] text-base-content/40" title="Payload received from the phone during this backup">
-                    {formatBytes(point.transferredBytes)} transferred
+                  <div class="text-[10px] text-base-content/40" title="本次备份从手机接收的数据量">
+                    {formatBytes(point.transferredBytes)} 已传输
                   </div>
                 {/if}
               </td>
@@ -210,9 +211,9 @@
                     disabled={!!restoreBlocked || !!point.damage}
                     onclick={() => onrestore(point.snapshotId)}
                     title={point.damage
-                      ? "A damaged restore point can't be restored"
-                      : (restoreBlocked ?? 'Restore this snapshot onto the phone')}
-                    aria-label="Restore this snapshot"
+                      ? "无法恢复损坏的恢复点"
+                      : (restoreBlocked ?? "将此恢复点恢复到手机")}
+                    aria-label="恢复此恢复点"
                   >
                     <Icon name="backup" size={13} />
                   </button>
@@ -222,9 +223,9 @@
                     disabled={downloading !== null || !!point.damage}
                     onclick={() => download(point.snapshotId)}
                     title={point.damage
-                      ? "A damaged restore point can't be downloaded"
-                      : `Download as a Finder backup (≈ ${formatBytes(point.sizeBytes)})`}
-                    aria-label="Download this snapshot as a Finder backup"
+                      ? "无法下载损坏的恢复点"
+                      : `下载为 Finder 备份（约 ${formatBytes(point.sizeBytes)}）`}
+                    aria-label="将此恢复点下载为 Finder 备份"
                   >
                     {#if downloading === point.snapshotId}
                       <span class="loading loading-spinner loading-xs"></span>
@@ -237,8 +238,8 @@
                     class="btn btn-ghost btn-xs text-error"
                     disabled={isRunning}
                     onclick={() => askDelete([point])}
-                    title={isRunning ? 'Another operation is running on this phone' : 'Delete this restore point'}
-                    aria-label="Delete restore point"
+                    title={isRunning ? "这台手机正在执行其他操作" : "删除此恢复点"}
+                    aria-label="删除恢复点"
                   >
                     <Icon name="trash" size={13} />
                   </button>
@@ -250,9 +251,9 @@
       </table>
     </div>
     {#if pageCount > 1}
-      <nav class="flex items-center justify-end gap-2 text-xs text-base-content/60" aria-label="Restore point pages">
+      <nav class="flex items-center justify-end gap-2 text-xs text-base-content/60" aria-label="恢复点分页">
         <span class="tabular-nums">
-          {pageStart + 1}–{pageStart + pagePoints.length} of {restorePoints.length}
+          {pageStart + 1}–{pageStart + pagePoints.length} ，共 {restorePoints.length}
         </span>
         <div class="join">
           <button
@@ -260,7 +261,7 @@
             class="join-item btn btn-ghost btn-xs"
             disabled={page === 1}
             onclick={() => (page -= 1)}
-            aria-label="Previous page"
+            aria-label="上一页"
           >
             <Icon name="chevronLeft" size={13} />
           </button>
@@ -269,7 +270,7 @@
             class="join-item btn btn-ghost btn-xs"
             disabled={page === pageCount}
             onclick={() => (page += 1)}
-            aria-label="Next page"
+            aria-label="下一页"
           >
             <Icon name="chevronRight" size={13} />
           </button>
@@ -281,35 +282,34 @@
 
 {#if pending.length > 0}
   <ConfirmDialog
-    title={pending.length > 1 ? `Delete ${pending.length} restore points?` : 'Delete this restore point?'}
+    title={pending.length > 1 ? `删除 ${pending.length} 个恢复点？` : "删除这个恢复点？"}
     icon="trash"
-    confirmLabel="Delete"
-    busyLabel="Deleting…"
-    cancelLabel={pending.length > 1 ? 'Keep them' : 'Keep it'}
+    confirmLabel="删除"
+    busyLabel="正在删除……"
+    cancelLabel="保留"
     failureCode="snapshot_delete_failed"
     onconfirm={confirmDelete}
     onclose={() => (pending = [])}
   >
     <p class="py-3 text-sm text-base-content/70">
       {#if pending.length > 1}
-        The {pending.length} selected restore points will be removed. Other restore points are not
-        affected.
+        所选 {pending.length} 个恢复点将被删除，其他恢复点不受影响。
       {:else}
-        The backup from
+        创建于
         <span class="font-medium">
           {formatDateTime(pending[0].created)}
         </span>
-        will be removed. Other restore points are not affected.
+        的备份将被删除，其他恢复点不受影响。
       {/if}
     </p>
     <p class="flex items-center gap-1.5 rounded-box bg-base-200 p-3 text-sm">
       <Icon name="info" size={14} />
       {#await reclaim}
-        <span class="text-base-content/60">Calculating space freed…</span>
+        <span class="text-base-content/60">正在计算可释放空间……</span>
       {:then bytes}
-        <span>Frees about <span class="font-medium tabular-nums">{formatBytes(bytes)}</span> on disk</span>
+        <span>预计释放磁盘空间 <span class="font-medium tabular-nums">{formatBytes(bytes)}</span> </span>
       {:catch}
-        <span class="text-base-content/60">Space could not be calculated right now</span>
+        <span class="text-base-content/60">暂时无法计算可释放空间</span>
       {/await}
     </p>
   </ConfirmDialog>

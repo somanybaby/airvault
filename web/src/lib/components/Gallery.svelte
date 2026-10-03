@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // Backed by the phone's own thumbnails, so it stays cheap for tens of thousands
   // of photos: tiles fetch thumbs near the viewport, far-off thumbs are evicted,
@@ -174,8 +175,8 @@
   }
 
   function assetType(a: GalleryAsset): string {
-    if (a.kind === 'video') return 'Video';
-    return a.live ? 'Live Photo' : 'Photo';
+    if (a.kind === 'video') return "视频";
+    return a.live ? "实况照片" : "照片";
   }
   function assetFormat(a: GalleryAsset): string {
     return a.name.includes('.') ? (a.name.split('.').pop() ?? '').toUpperCase() : '';
@@ -225,23 +226,23 @@
   <div class="modal-box relative flex h-[90vh] max-h-[90vh] w-full max-w-5xl flex-col gap-3">
     <div class="flex shrink-0 items-start justify-between gap-3">
       <div class="min-w-0">
-        <h3 class="truncate text-lg font-bold">Media — {name}</h3>
+        <h3 class="truncate text-lg font-bold">媒体 — {name}</h3>
         <p class="mt-0.5 text-sm text-base-content/60">
-          {total ? `${total.toLocaleString()} items` : 'Camera roll'}
+          {total ? `${total.toLocaleString()} 项` : "照片和视频"}
         </p>
       </div>
       <div class="flex shrink-0 items-center gap-1">
         <button
           type="button"
           class="btn btn-square btn-ghost btn-sm"
-          title="Rescan"
-          aria-label="Rescan"
+          title="重新扫描"
+          aria-label="重新扫描"
           disabled={loading}
           onclick={() => load()}
         >
           <Icon name="refresh" size={16} />
         </button>
-        <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="Close" onclick={() => dialog.close()}>
+        <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="关闭" onclick={() => dialog.close()}>
           <Icon name="x" size={16} />
         </button>
       </div>
@@ -251,12 +252,12 @@
       {#if loading}
         <p class="flex items-center gap-2 p-4 text-sm text-base-content/60">
           <span class="loading loading-spinner loading-sm"></span>
-          Reading the camera roll…
+          正在读取照片和视频……
         </p>
       {:else if error}
         <ErrorLine {error} variant="alert" className="m-3" />
       {:else if assets.length === 0}
-        <p class="p-4 text-sm text-base-content/50">Nothing here.</p>
+        <p class="p-4 text-sm text-base-content/50">暂无内容。</p>
       {:else}
         <div class="grid grid-cols-3 gap-1 sm:grid-cols-4 md:grid-cols-6">
           {#each assets as a (a.path)}
@@ -281,7 +282,7 @@
                 <span
                   class="absolute left-1 top-1 rounded bg-black/55 px-1 text-[10px] font-semibold leading-tight text-white"
                 >
-                  LIVE
+                  实况
                 </span>
               {/if}
               {#if a.kind === 'video'}
@@ -301,7 +302,7 @@
           <p class="flex items-center justify-center gap-2 p-3 text-sm text-error">
             <Icon name="alert" size={14} stroke={2} />
             {moreError}
-            <button type="button" class="btn btn-ghost btn-xs" onclick={() => loadMore()}>Retry</button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick={() => loadMore()}>重试</button>
           </p>
         {/if}
       {/if}
@@ -312,12 +313,12 @@
       <div class="absolute inset-0 z-10 flex flex-col gap-2 rounded-2xl bg-base-100 p-3">
         <div class="flex shrink-0 items-center justify-between gap-2">
           <button type="button" class="btn btn-ghost btn-sm" onclick={() => (lightbox = null)}>
-            <Icon name="arrowLeft" size={16} /> Back
+            <Icon name="arrowLeft" size={16} /> 返回
           </button>
           <button
             type="button"
             class="btn btn-square btn-ghost btn-sm"
-            aria-label="Close"
+            aria-label="关闭"
             onclick={() => (lightbox = null)}
           >
             <Icon name="x" size={16} />
@@ -329,7 +330,7 @@
             <button
               type="button"
               class="btn btn-circle btn-sm absolute left-1 top-1/2 z-10 -translate-y-1/2 border-none bg-base-100/70"
-              aria-label="Previous"
+              aria-label="上一个"
               onclick={() => step(-1)}
             >
               <Icon name="arrowLeft" size={18} />
@@ -339,7 +340,7 @@
             <button
               type="button"
               class="btn btn-circle btn-sm absolute right-1 top-1/2 z-10 -translate-y-1/2 border-none bg-base-100/70"
-              aria-label="Next"
+              aria-label="下一个"
               onclick={() => step(1)}
             >
               <Icon name="arrowRight" size={18} />
@@ -351,7 +352,7 @@
                 <img src={thumbs[a.path]} alt={a.name} class="max-h-[55vh] max-w-full rounded" onerror={hideBroken} />
               {/if}
               <p class="text-sm text-base-content/60">
-                {a.kind === 'video' ? 'Video — Save to view it.' : "Couldn't render a preview — Save the original."}
+                {a.kind === 'video' ? "视频请点击“保存”下载后查看。" : "无法显示预览，请保存原文件。"}
               </p>
             </div>
           {/snippet}
@@ -382,13 +383,13 @@
             {:else}
               <Icon name="download" size={14} />
             {/if}
-            Save
+            保存
           </button>
         </div>
       </div>
     {/if}
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close">close</button>
+    <button aria-label="关闭">关闭</button>
   </form>
 </dialog>

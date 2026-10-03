@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // A phone leaves usbDevices the moment it pairs; devicesStore then owns its
   // state. The host mounts this only while open, so the pair-state fetch and SSE
@@ -47,7 +48,7 @@
   const registered = $derived(
     (devicesStore.data ?? []).find((d) => d.udid === selectedUdid) ?? null,
   );
-  const selectedName = $derived(selectedUsb?.name ?? registered?.name ?? 'your iPhone');
+  const selectedName = $derived(selectedUsb?.name ?? registered?.name ?? "你的 iPhone");
 
   // A plugged-in phone that's already paired never shows in the pick list; say
   // so instead of a misleading endless "waiting" spinner.
@@ -122,9 +123,9 @@
   });
 
   const stepMeta = [
-    { n: 1, label: 'Connect' },
-    { n: 2, label: 'Pair' },
-    { n: 3, label: 'Done' },
+    { n: 1, label: "连接" },
+    { n: 2, label: "配对" },
+    { n: 3, label: "完成" },
   ];
 </script>
 
@@ -133,12 +134,12 @@
     <div class="flex flex-col gap-4">
       <div class="flex items-start justify-between gap-3">
         <div>
-          <h3 class="text-lg font-bold">Pair an iPhone</h3>
+          <h3 class="text-lg font-bold">配对 iPhone</h3>
           <p class="mt-0.5 text-sm text-base-content/60">
-            A one-time USB setup — after it, the phone is reachable over Wi-Fi
+            首次通过 USB 配对，之后可通过 Wi-Fi 连接手机
           </p>
         </div>
-        <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="Close" onclick={() => dialog.close()}>
+        <button type="button" class="btn btn-square btn-ghost btn-sm" aria-label="关闭" onclick={() => dialog.close()}>
           <Icon name="x" size={16} />
         </button>
       </div>
@@ -146,29 +147,28 @@
       {#if backendOffline}
         <div role="alert" class="alert alert-error alert-soft">
           <Icon name="offline" size={18} />
-          <span>AirVault can't be reached right now — the wizard will start automatically once the daemon is back.</span>
+          <span>暂时无法连接 AirVault 服务，服务恢复后配对向导会自动继续。</span>
         </div>
       {:else if loadError}
         <div role="alert" class="alert alert-error alert-soft">
           <Icon name="alert" size={18} />
           <div class="flex items-center justify-between gap-3">
             <span>{loadError}</span>
-            <button type="button" class="btn btn-ghost btn-sm" onclick={() => pairStateStore.refresh()}>Retry</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick={() => pairStateStore.refresh()}>重试</button>
           </div>
         </div>
       {:else if loading}
         <div class="flex items-center gap-3 rounded-box bg-base-200 p-4 text-sm text-base-content/60">
           <span class="loading loading-spinner loading-sm"></span>
-          Looking for devices…
+          正在查找设备……
         </div>
       {:else if muxerOffline}
         <div role="alert" class="alert alert-warning alert-soft">
           <Icon name="alert" size={20} />
           <div>
-            <h4 class="font-semibold">USB/Wi-Fi unavailable</h4>
+            <h4 class="font-semibold">USB/Wi-Fi 不可用</h4>
             <div class="text-sm opacity-90">
-              netmuxd isn't answering, so USB devices can't be detected. This screen recovers
-              automatically once it's back.
+              netmuxd 无响应，暂时无法检测 USB 设备。服务恢复后此页面会自动更新。
             </div>
           </div>
         </div>
@@ -185,44 +185,43 @@
           {#if step === 1}
             <div class="flex flex-col gap-4">
               <div>
-                <h4 class="text-lg font-semibold">Plug the iPhone into this server</h4>
+                <h4 class="text-lg font-semibold">将 iPhone 连接到这台服务器的 USB 接口</h4>
                 <p class="mt-1 text-sm text-base-content/60">
-                  iOS requires a cable for the first handshake — this is the only time you'll need one
+                  iOS 要求首次配对使用数据线，完成后即可尝试无线连接
                 </p>
               </div>
 
               {#if usbDevices.length === 0}
                 <div class="flex items-center gap-3 rounded-box bg-base-200 p-4">
                   <span class="loading loading-spinner loading-sm text-primary"></span>
-                  <p class="text-sm font-medium">Waiting for a USB device…</p>
+                  <p class="text-sm font-medium">正在等待 USB 设备……</p>
                 </div>
                 {#if pairedOnUsb.length > 0}
                   <div role="alert" class="alert alert-info alert-soft">
                     <Icon name="info" size={18} />
                     <p class="text-sm">
                       <span class="font-medium">{pairedOnUsb[0].name}</span>
-                      {pairedOnUsb.length > 1 ? ` and ${pairedOnUsb.length - 1} more are` : ' is'} already
-                      paired — manage it from the device list. Only new phones show up here.
+                      {pairedOnUsb.length > 1 ? ` 及另外 ${pairedOnUsb.length - 1} 台设备` : ""} 已经配对，请在设备列表中管理。此处只显示尚未配对的手机。
                     </p>
                   </div>
                 {/if}
                 <ul class="ml-4 list-disc space-y-1.5 text-sm text-base-content/60 marker:text-base-content/50">
-                  <li>Use a data-capable cable, not a charge-only one.</li>
-                  <li>Unlock the phone — locked phones may not show up.</li>
-                  <li>Try another USB port if nothing appears.</li>
+                  <li>请使用支持数据传输的数据线。</li>
+                  <li>请解锁手机，锁定的手机可能无法检测到。</li>
+                  <li>如果未检测到设备，请尝试其他 USB 接口。</li>
                 </ul>
               {:else if usbDevices.length === 1}
                 <div class="flex items-center gap-3 rounded-box bg-base-200 p-4">
                   <span class="flex h-9 w-9 items-center justify-center rounded-box bg-primary/10 text-primary"><Icon name="phone" size={18} /></span>
                   <div class="min-w-0">
                     <p class="truncate text-sm font-semibold">{usbDevices[0].name}</p>
-                    <p class="text-xs text-base-content/60">Connected over USB</p>
+                    <p class="text-xs text-base-content/60">已通过 USB 连接</p>
                   </div>
-                  <span class="ml-auto"><Pill tone="green" dot>Ready</Pill></span>
+                  <span class="ml-auto"><Pill tone="green" dot>已就绪</Pill></span>
                 </div>
               {:else}
                 <div>
-                  <p class="mb-2 text-sm font-medium">Several devices detected — pick the one to pair:</p>
+                  <p class="mb-2 text-sm font-medium">检测到多个设备，请选择要配对的设备：</p>
                   <div class="flex flex-col gap-2">
                     {#each usbDevices as d (d.udid)}
                       <label
@@ -241,7 +240,7 @@
 
               <div>
                 <button type="button" class="btn btn-primary" disabled={!selectedUsb} onclick={goPair}>
-                  Continue <Icon name="arrowRight" size={15} />
+                  继续 <Icon name="arrowRight" size={15} />
                 </button>
               </div>
             </div>
@@ -250,15 +249,15 @@
             <div class="flex flex-col gap-4">
               <div>
                 {#if wifiAuthorizationFailed}
-                  <h4 class="text-lg font-semibold">USB pairing complete</h4>
+                  <h4 class="text-lg font-semibold">USB 配对完成</h4>
                   <p class="mt-1 text-sm text-base-content/60">
-                    The iPhone already trusts AirVault, so you won't need to approve it again
+                    iPhone 已信任 AirVault，无需再次确认信任
                   </p>
                 {:else}
-                  <h4 class="text-lg font-semibold">Tap “Trust” on the iPhone</h4>
+                  <h4 class="text-lg font-semibold">在 iPhone 上点击“信任”</h4>
                   <p class="mt-1 text-sm text-base-content/60">
-                    A “Trust This Computer?” prompt is on the phone. Tap
-                    <span class="font-medium text-base-content">Trust</span> and enter the phone's passcode
+                    手机上会显示“要信任此电脑吗？”提示，请点击
+                    <span class="font-medium text-base-content">信任</span> 并输入手机解锁密码
                   </p>
                 {/if}
               </div>
@@ -266,36 +265,34 @@
               {#if trust.kind === 'starting'}
                 <div class="flex items-center gap-3 rounded-box bg-base-200 p-4">
                   <span class="loading loading-spinner loading-sm text-primary"></span>
-                  <p class="text-sm font-medium">Asking the phone to pair…</p>
+                  <p class="text-sm font-medium">正在请求手机配对……</p>
                 </div>
               {:else if trust.kind === 'pending'}
                 <div class="flex items-center gap-3 rounded-box bg-base-200 p-4">
                   <span class="loading loading-spinner loading-sm text-primary"></span>
-                  <p class="text-sm font-medium">Waiting for you to tap Trust on the phone…</p>
+                  <p class="text-sm font-medium">正在等待你在手机上点击“信任”……</p>
                 </div>
               {:else if trust.kind === 'locked'}
                 <div role="alert" class="alert alert-warning alert-soft">
                   <Icon name="lock" size={18} />
                   <div>
-                    <p class="font-medium">Unlock the iPhone</p>
-                    <p class="mt-1 text-sm opacity-80">The Trust prompt appears right after you unlock it — this screen advances automatically.</p>
+                    <p class="font-medium">请解锁 iPhone</p>
+                    <p class="mt-1 text-sm opacity-80">解锁后手机会显示信任提示，此页面将自动继续。</p>
                   </div>
                 </div>
               {:else if trust.kind === 'denied'}
                 <div role="alert" class="alert alert-warning alert-soft">
                   <Icon name="alert" size={18} />
                   <div>
-                    <p class="font-medium">“Don't Trust” was tapped on the phone</p>
+                    <p class="font-medium">你在手机上点击了“不信任”</p>
                     <p class="mt-1 text-sm opacity-80">
-                      iOS won't ask again on this connection. <span class="font-medium">Unplug the USB
-                      cable and plug it back in</span> — the Trust prompt reappears and pairing
-                      continues here automatically.
+                      iOS 不会在当前连接中再次询问。 <span class="font-medium">请拔下 USB 数据线，再重新连接</span> ，手机会重新显示信任提示，此处将自动继续配对。
                     </p>
                   </div>
                 </div>
                 <div>
                   <button type="button" class="btn btn-ghost btn-sm" onclick={() => selectedUdid && startTrust(selectedUdid)}>
-                    <Icon name="refresh" size={14} /> Ask anyway
+                    <Icon name="refresh" size={14} /> 再次请求
                   </button>
                 </div>
               {:else if trust.kind === 'error'}
@@ -306,7 +303,7 @@
                 <div>
                   <button type="button" class="btn btn-primary" onclick={() => selectedUdid && startTrust(selectedUdid)}>
                     <Icon name="refresh" size={15} />
-                    {wifiAuthorizationFailed ? 'Try Wi-Fi setup again' : 'Retry'}
+                    {wifiAuthorizationFailed ? "重试 Wi-Fi 设置" : "重试"}
                   </button>
                 </div>
               {/if}
@@ -318,17 +315,16 @@
                 <Icon name="check" size={30} stroke={2.2} />
               </span>
               <div>
-                <h4 class="text-lg font-semibold">Paired!</h4>
+                <h4 class="text-lg font-semibold">配对成功！</h4>
                 <p class="mx-auto mt-1 max-w-md text-sm text-base-content/60">
-                  <span class="font-medium text-base-content">{selectedName}</span> is connected to
-                  AirVault — you can unplug the cable
+                  <span class="font-medium text-base-content">{selectedName}</span> 已连接到 AirVault，可以拔下数据线
                 </p>
               </div>
               <div class="mt-1 flex flex-wrap justify-center gap-2">
                 <button type="button" class="btn btn-primary" onclick={() => openDevicePage(selectedUdid!)}>
-                  <Icon name="phone" size={15} /> Open device page
+                  <Icon name="phone" size={15} /> 查看设备
                 </button>
-                <button type="button" class="btn btn-ghost" onclick={() => dialog.close()}>Close</button>
+                <button type="button" class="btn btn-ghost" onclick={() => dialog.close()}>关闭</button>
               </div>
             </div>
           {/if}
@@ -336,14 +332,14 @@
 
         {#if step === 2}
           <div class="flex items-center justify-between border-t border-base-300 pt-3">
-            <button type="button" class="btn btn-ghost btn-sm" onclick={() => (step -= 1)}>Back</button>
-            <button type="button" class="btn btn-ghost btn-sm" onclick={() => dialog.close()}>Cancel</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick={() => (step -= 1)}>返回</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick={() => dialog.close()}>取消</button>
           </div>
         {/if}
       {/if}
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close">close</button>
+    <button aria-label="关闭">关闭</button>
   </form>
 </dialog>

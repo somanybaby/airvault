@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import { push } from 'svelte-spa-router';
   import Logo from '../lib/components/Logo.svelte';
@@ -32,18 +33,18 @@
     <form class="card-body gap-4" onsubmit={submit}>
       <div class="flex flex-col items-center gap-2 text-center">
         <Logo size={40} />
-        <h1 class="text-lg font-semibold tracking-tight">Sign in to AirVault</h1>
+        <h1 class="text-lg font-semibold tracking-tight">登录 AirVault</h1>
         <p class="text-sm text-base-content/60">
-          Paste your Web UI token
+          请输入管理页面访问令牌
         </p>
       </div>
 
       <input
         type="password"
         class="input w-full"
-        placeholder="Web UI token"
+        placeholder="管理页面访问令牌"
         autocomplete="current-password"
-        aria-label="Web UI token"
+        aria-label="管理页面访问令牌"
         bind:value={token}
         disabled={busy}
         {@attach (node) => node.focus()}
@@ -53,7 +54,7 @@
 
       <button type="submit" class="btn btn-primary" disabled={busy || !token.trim()}>
         {#if busy}<span class="loading loading-spinner loading-sm"></span>{/if}
-        Sign in
+        登录
       </button>
     </form>
   </div>

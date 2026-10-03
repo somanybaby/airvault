@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import { startBackup, startVerify } from '../api/backups';
   import { errMsg } from '../api/client';
@@ -96,8 +97,8 @@
     damagedCount === 0
       ? null
       : damagedCount === ownPoints.length
-        ? 'No restore point is intact, so the next backup will be a full one; delete the damaged ones to free their space'
-        : "Damaged restore points can't be restored or downloaded; delete them or check again",
+        ? "没有完整的恢复点，下次将执行全量备份；可删除损坏的恢复点以释放空间"
+        : "损坏的恢复点无法恢复或下载，请删除它们或重新校验",
   );
   // ISO times in UTC sort as they happen.
   const lastVerified = $derived(
@@ -114,34 +115,34 @@
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div class="min-w-0">
         <h2 class="flex items-center gap-2 text-sm font-semibold">
-          Backup
+          备份
           {#if damagedCount > 0}
-            <Pill tone="red" dot>{damagedCount} damaged</Pill>
+            <Pill tone="red" dot>{damagedCount} 已损坏</Pill>
           {:else if lastVerified}
-            <span class="tooltip" data-tip={`Integrity checked ${relativeTime(lastVerified, $now)}`}>
-              <Pill tone="green" dot>Verified</Pill>
+            <span class="tooltip" data-tip={`完整性校验时间： ${relativeTime(lastVerified, $now)}`}>
+              <Pill tone="green" dot>已校验</Pill>
             </span>
           {/if}
         </h2>
         {#if isRunning}
           <p class="mt-0.5 text-xs text-base-content/60">
             {isRestore
-              ? 'A restore is running right now'
+              ? "正在恢复"
               : isVerify
-                ? 'An integrity check is running right now'
-                : 'A backup is running right now'}
+                ? "正在校验备份完整性"
+                : "正在备份"}
           </p>
         {:else if stored}
           <p class="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-base-content/60">
             <span title={formatDateTime(stored.created)} class="text-base-content/80">
-              Backed up {relativeTime(stored.created, $now)}
+              备份于 {relativeTime(stored.created, $now)}
             </span>
             {#if stored.sizeBytes}<span>· {formatBytes(stored.sizeBytes)}</span>{/if}
-            {#if stored.encrypted}<span>· encrypted</span>{/if}
+            {#if stored.encrypted}<span>· 已加密</span>{/if}
             {#if stored.iosVersion}<span>· iOS {stored.iosVersion}</span>{/if}
             {#if lastFailure}
               <span class="tooltip tooltip-error" data-tip={lastFailure}>
-                <Pill tone="red" dot>Last run failed</Pill>
+                <Pill tone="red" dot>上次操作失败</Pill>
               </span>
             {/if}
           </p>
@@ -149,13 +150,13 @@
             <p class="mt-1 text-xs text-error">{damageNote}</p>
           {/if}
         {:else if !sourcesLoaded}
-          <p class="mt-0.5 text-xs text-base-content/40">Checking the stored snapshot…</p>
+          <p class="mt-0.5 text-xs text-base-content/40">正在检查已保存的备份……</p>
         {:else}
           <p class="mt-0.5 flex items-center gap-2 text-xs text-base-content/60">
-            <span>Never backed up</span>
+            <span>尚未备份</span>
             {#if lastFailure}
               <span class="tooltip tooltip-error" data-tip={lastFailure}>
-                <Pill tone="red" dot>Failed</Pill>
+                <Pill tone="red" dot>失败</Pill>
               </span>
             {/if}
           </p>
@@ -163,14 +164,14 @@
         {#if !reachable && !isRunning && device.paired}
           <p class="mt-1 flex items-center gap-1.5 text-xs text-base-content/50">
             <Icon name="offline" size={12} />
-            Offline — a backup started now waits for the phone to come back
+            设备离线，现在启动备份后会等待手机重新连接
           </p>
         {/if}
       </div>
       {#if cancelPending}
         <button type="button" class="btn btn-ghost btn-sm" disabled>
           <span class="loading loading-spinner loading-xs"></span>
-          Cancelling…
+          正在取消……
         </button>
       {:else if live}
         <button
@@ -178,13 +179,13 @@
           class="btn btn-ghost btn-sm text-error"
           onclick={() => (cancelAskedFor = live.runId)}
           title={isRestore
-            ? 'Stop this restore; the phone then reports it failed and restarts'
+            ? "停止恢复；手机随后会提示恢复失败并重启"
             : isVerify
-              ? 'Stop the integrity check'
-              : 'Stop this attempt and discard the data received during it'}
+              ? "停止完整性校验"
+              : "停止本次备份并丢弃本次接收的数据"}
         >
           <Icon name="x" size={15} />
-          Cancel…
+          取消……
         </button>
       {:else}
         <div class="flex flex-wrap gap-2">
@@ -194,14 +195,14 @@
               class="btn btn-ghost btn-sm"
               disabled={starting !== null}
               onclick={() => start('verify', 'verify_start_failed')}
-              title="Read every stored file and mark the restore points whose data no longer reads right"
+              title="读取所有备份文件，将无法正常读取的恢复点标记为损坏"
             >
               {#if starting === 'verify'}
                 <span class="loading loading-spinner loading-xs"></span>
               {:else}
                 <Icon name="shield" size={14} />
               {/if}
-              Verify
+              校验
             </button>
           {/if}
           {#if hasRestoreSource}
@@ -210,9 +211,9 @@
               class="btn btn-outline btn-sm"
               disabled={starting !== null || !!blocked}
               onclick={onrestore}
-              title={blocked ?? 'Put a stored backup onto this phone'}
+              title={blocked ?? "将已保存的备份恢复到这台手机"}
             >
-              <Icon name="backup" size={14} /> Restore…
+              <Icon name="backup" size={14} /> 恢复……
             </button>
           {/if}
           <button
@@ -221,15 +222,15 @@
             disabled={starting !== null || !device.paired}
             onclick={() => start('backup', 'backup_start_failed')}
             title={!device.paired
-              ? 'Pair the phone over USB first'
+              ? "请先通过 USB 配对手机"
               : !reachable
-                ? 'The phone is offline — the backup starts as soon as it comes back'
-                : 'Update the stored backup (incremental)'}
+                ? "手机离线，重新连接后将开始备份"
+                : "更新已保存的备份（增量备份）"}
           >
             {#if starting === 'backup'}
-              <span class="loading loading-spinner loading-xs"></span> Starting…
+              <span class="loading loading-spinner loading-xs"></span> 正在启动……
             {:else}
-              <Icon name="backup" size={15} /> Back up now
+              <Icon name="backup" size={15} /> 立即备份
             {/if}
           </button>
         </div>
@@ -256,7 +257,7 @@
           <div class="flex items-center justify-between gap-2 font-mono text-xs tabular-nums text-base-content/60">
             <span class="truncate">
               {#if live.transferred > 0}
-                {formatBytes(live.transferred)} {isVerify ? 'checked' : 'transferred'}
+                {formatBytes(live.transferred)} {isVerify ? "已校验" : "已传输"}
               {/if}
             </span>
             {#if speed}<span class="shrink-0">{speed}</span>{/if}
@@ -265,14 +266,14 @@
         {#if live.stage === 'waiting_for_device' && !isRestore}
           <p class="flex items-center gap-1.5 text-xs text-base-content/60">
             <Icon name="info" size={13} />
-            Wake the phone or connect it by USB — the backup starts as soon as it appears.
+            请唤醒手机或通过 USB 连接，检测到设备后将开始备份。
           </p>
         {:else if live.stage === 'preparing' && !isRestore}
           <p class="flex items-center gap-1.5 text-xs text-base-content/60">
             <Icon name="info" size={13} />
             {live.auto
-              ? 'Automatic backup — enter the iPhone passcode on the phone within a minute'
-              : 'Enter the iPhone passcode on the phone to continue'}
+              ? "自动备份已启动，请在一分钟内在 iPhone 上输入解锁密码"
+              : "请在 iPhone 上输入解锁密码以继续"}
           </p>
         {/if}
       </div>
@@ -284,13 +285,13 @@
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="min-w-0">
           <p class="flex items-center gap-2 text-sm font-semibold">
-            Encryption
-            {#if device.encrypted}<Pill tone="green" dot>On</Pill>{:else}<Pill tone="slate" dot>Off</Pill>{/if}
+            备份加密
+            {#if device.encrypted}<Pill tone="green" dot>已开启</Pill>{:else}<Pill tone="slate" dot>已关闭</Pill>{/if}
           </p>
           <p class="mt-0.5 text-xs text-base-content/60">
             {device.encrypted
-              ? 'Backups are protected with a password set on the phone'
-              : 'Health and Keychain data are only included in encrypted backups'}
+              ? "备份受手机上设置的备份密码保护"
+              : "只有加密备份才包含健康和钥匙串数据"}
           </p>
         </div>
         <div class="flex flex-wrap gap-2">
@@ -302,7 +303,7 @@
               title={blocked}
               onclick={() => (passwordMode = 'change')}
             >
-              Change password…
+              修改密码……
             </button>
             <button
               type="button"
@@ -311,7 +312,7 @@
               title={blocked}
               onclick={() => (passwordMode = 'disable')}
             >
-              Turn off…
+              关闭加密……
             </button>
           {:else}
             <button
@@ -321,21 +322,21 @@
               title={blocked}
               onclick={() => (passwordMode = 'enable')}
             >
-              <Icon name="lock" size={14} /> Set password…
+              <Icon name="lock" size={14} /> 设置密码……
             </button>
           {/if}
         </div>
       </div>
       {#if !reachable}
-        <p class="text-xs text-base-content/50">Connect the device (Wi-Fi or USB) to manage encryption.</p>
+        <p class="text-xs text-base-content/50">请通过 Wi-Fi 或 USB 连接设备以管理加密设置。</p>
       {/if}
     </div>
 
     <div class="flex flex-wrap items-center justify-between gap-3 border-t border-base-300 pt-4">
       <div class="min-w-0">
         <p class="flex items-center gap-2 text-sm font-semibold">
-          Automatic backup
-          {#if autoStatus}<Pill tone="green" dot>On</Pill>{:else}<Pill tone="slate" dot>Off</Pill>{/if}
+          自动备份
+          {#if autoStatus}<Pill tone="green" dot>已开启</Pill>{:else}<Pill tone="slate" dot>已关闭</Pill>{/if}
         </p>
         {#if autoStatus}
           <p class="mt-0.5 text-xs text-base-content/60">
@@ -344,7 +345,7 @@
           </p>
         {:else}
           <p class="mt-0.5 text-xs text-base-content/60">
-            Backs up shortly after the iPhone is unlocked at home; iOS asks for the passcode each time
+            iPhone 在家中解锁后启动备份；每次都需要按 iOS 提示输入解锁密码
           </p>
         {/if}
       </div>
@@ -352,11 +353,11 @@
         type="button"
         class="btn btn-ghost btn-sm"
         disabled={!device.paired}
-        title={device.paired ? undefined : 'Pair the phone over USB first'}
+        title={device.paired ? undefined : "请先通过 USB 配对手机"}
         onclick={() => (autoBackupOpen = true)}
       >
         <Icon name="clock" size={14} />
-        {autoStatus ? 'Change…' : 'Set up…'}
+        {autoStatus ? "修改……" : "设置……"}
       </button>
     </div>
   </div>
@@ -365,23 +366,22 @@
 {#if cancelOpen && live}
   {@const runId = live.runId}
   <ConfirmDialog
-    title={`Cancel this ${isRestore ? 'restore' : isVerify ? 'integrity check' : 'backup'}?`}
+    title={`取消本次${isRestore ? '恢复' : isVerify ? '完整性校验' : '备份'}？`}
     icon="x"
-    confirmLabel={isRestore ? 'Stop restore' : isVerify ? 'Stop check' : 'Discard attempt'}
-    busyLabel="Cancelling…"
-    cancelLabel="Keep running"
+    confirmLabel={isRestore ? "停止恢复" : isVerify ? "停止校验" : "放弃本次备份"}
+    busyLabel="正在取消……"
+    cancelLabel="继续运行"
     failureCode="backup_cancel_failed"
     onconfirm={() => cancelCurrentRun(runId)}
     onclose={() => (cancelAskedFor = null)}
   >
     <p class="py-3 text-sm text-base-content/70">
       {#if isRestore}
-        The phone stays on “Restore in Progress” until iOS gives up, then reports that the restore failed and
-        restarts. The stored backup is not changed.
+        手机会停留在“正在恢复”界面，直到 iOS 终止恢复，再提示恢复失败并重启。已保存的备份不会改变。
       {:else if isVerify}
-        The check will stop. What it has already found stays marked.
+        校验将停止，已发现的损坏标记会保留。
       {:else}
-        This unfinished attempt and all data received during it will be discarded. Existing completed restore points will not be changed.
+        本次未完成的备份及其接收的数据将被丢弃，已有的完整恢复点不会改变。
       {/if}
     </p>
   </ConfirmDialog>

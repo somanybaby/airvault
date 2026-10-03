@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // SSE health is deliberately not shown: it reconnects on its own, and a dead
   // backend already raises the App banner.
@@ -29,7 +30,7 @@
 <header class="sticky top-0 z-20 border-b border-base-300 bg-base-100/85 backdrop-blur">
   <div class="navbar mx-auto min-h-14 w-full max-w-6xl gap-2 px-4 sm:px-6">
     <div class="navbar-start min-w-0">
-      <a href="/" use:link class="flex items-center gap-2" aria-label="AirVault home">
+      <a href="/" use:link class="flex items-center gap-2" aria-label="AirVault 首页">
         <Logo size={36} />
         <span class="text-base font-semibold tracking-tight">AirVault</span>
       </a>
@@ -41,14 +42,14 @@
           <Pill tone="green" dot>USB {muxer.usb} · Wi-Fi {muxer.wifi}</Pill>
         </span>
       {:else if muxer}
-        <span title={muxer.error}><Pill tone="red" dot>USB/Wi-Fi down</Pill></span>
+        <span title={muxer.error}><Pill tone="red" dot>USB/Wi-Fi 不可用</Pill></span>
       {/if}
       <ThemeToggle />
       <button
         type="button"
         class="btn btn-ghost btn-circle"
-        title="Sign out"
-        aria-label="Sign out"
+        title="退出登录"
+        aria-label="退出登录"
         onclick={signOut}
       >
         <Icon name="logout" size={18} />

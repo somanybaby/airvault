@@ -1,6 +1,10 @@
+# Modified by somanybaby on 2026-10-03: build the Chinese community edition locally.
+# Upstream: wizier/airvault. See NOTICE.md; GPL-3.0-or-later.
 services:
   airvault:
-    image: ghcr.io/wizier/airvault:latest
+    image: airvault-zh:local
+    build:
+      context: .
     container_name: airvault
     restart: unless-stopped
 

@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // enable = new password, change = old + new, disable = old only. The request
   // stays in the modal so device verdicts can be corrected and retried in place.
@@ -28,10 +29,10 @@
 
   const title = $derived(
     mode === 'enable'
-      ? `Encrypt backups of ${name}`
+      ? `加密备份： ${name}`
       : mode === 'change'
-        ? `Change the backup password of ${name}`
-        : `Turn off backup encryption for ${name}`,
+        ? `修改备份密码： ${name}`
+        : `关闭备份加密： ${name}`,
   );
 
   const needsOld = $derived(mode === 'change' || mode === 'disable');
@@ -88,41 +89,38 @@
 
     {#if mode === 'enable'}
       <p class="py-3 text-sm text-base-content/70">
-        Encrypted backups include Health and Keychain data. The password lives on the phone and
-        protects every future backup.
+        加密备份包含健康和钥匙串数据。备份密码保存在手机上，用于保护之后的每次备份。
       </p>
       <div role="alert" class="alert alert-warning alert-soft">
         <Icon name="alert" size={18} />
         <p class="text-sm">
-          <span class="font-medium">The password cannot be recovered.</span> Without it you can't
-          restore an encrypted backup.
+          <span class="font-medium">备份密码无法找回。</span> 忘记密码后将无法恢复加密备份。
         </p>
       </div>
     {:else if mode === 'disable'}
       <p class="py-3 text-sm text-base-content/70">
-        Future backups will no longer include Health and Keychain data. You need the current
-        password to turn encryption off.
+        关闭加密后，今后的备份不再包含健康和钥匙串数据。关闭加密需要输入当前备份密码。
       </p>
     {:else}
       <p class="py-3 text-sm text-base-content/70">
-        Enter the current password, then the new one. The change applies to all future backups.
+        请先输入当前备份密码，再输入新密码。新密码将用于今后的备份。
       </p>
     {/if}
 
     <div class="mt-3 flex flex-col gap-3">
       {#if needsOld}
         <PasswordField
-          label="Current password"
+          label="当前备份密码"
           bind:value={oldPw}
           autocomplete="current-password"
           disabled={busy}
-          error={wrongPassword ? "This doesn't match the backup password on the phone" : null}
+          error={wrongPassword ? "该密码与手机上的备份密码不符" : null}
           focus={wrongPassword}
         />
       {/if}
       {#if needsNew}
-        <PasswordField label="New password" bind:value={newPw} autocomplete="new-password" disabled={busy} />
-        <PasswordField label="Confirm new password" bind:value={confirmPw} autocomplete="new-password" disabled={busy} />
+        <PasswordField label="新备份密码" bind:value={newPw} autocomplete="new-password" disabled={busy} />
+        <PasswordField label="确认新密码" bind:value={confirmPw} autocomplete="new-password" disabled={busy} />
       {/if}
     </div>
 
@@ -132,10 +130,9 @@
           <Icon name="phone" size={20} />
         </span>
         <div class="min-w-0">
-          <p class="text-sm font-semibold">Now check the iPhone</p>
+          <p class="text-sm font-semibold">请查看 iPhone</p>
           <p class="mt-0.5 text-sm text-base-content/70">
-            Confirm the device passcode there if asked. The password update normally completes
-            within a few seconds after confirmation.
+            如果手机要求确认，请输入设备解锁密码。确认后，备份密码通常会在几秒内更新。
           </p>
         </div>
         <span class="loading loading-spinner loading-sm ml-auto shrink-0 self-center"></span>
@@ -144,8 +141,8 @@
       <div role="alert" class="alert alert-warning alert-soft mt-3">
         <Icon name="lock" size={18} />
         <div class="text-sm">
-          <p class="font-medium">The iPhone is locked</p>
-          <p class="mt-1 opacity-80">Unlock it (keep it unlocked) and try again.</p>
+          <p class="font-medium">iPhone 已锁定</p>
+          <p class="mt-1 opacity-80">请解锁手机并保持解锁状态，然后重试。</p>
         </div>
       </div>
     {:else if !wrongPassword}
@@ -153,7 +150,7 @@
     {/if}
 
     <div class="modal-action">
-      <button type="button" class="btn btn-ghost" onclick={() => dialog.close()}>Cancel</button>
+      <button type="button" class="btn btn-ghost" onclick={() => dialog.close()}>取消</button>
       <button
         type="button"
         class={`btn ${mode === 'disable' ? 'btn-error' : 'btn-primary'}`}
@@ -162,18 +159,18 @@
       >
         {#if busy}
           <span class="loading loading-spinner loading-xs"></span>
-          Applying…
+          正在应用……
         {:else if mode === 'enable'}
-          <Icon name="lock" size={15} /> Enable encryption
+          <Icon name="lock" size={15} /> 启用加密
         {:else if mode === 'change'}
-          <Icon name="lock" size={15} /> Change password
+          <Icon name="lock" size={15} /> 修改密码
         {:else}
-          <Icon name="lock" size={15} /> Turn off encryption
+          <Icon name="lock" size={15} /> 关闭加密
         {/if}
       </button>
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close">close</button>
+    <button aria-label="关闭">关闭</button>
   </form>
 </dialog>

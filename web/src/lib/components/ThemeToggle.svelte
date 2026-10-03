@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // The inline script in index.html applies the saved theme before first paint;
   // this toggle must persist under the same key and theme names.
@@ -19,9 +20,9 @@
 
 <label
   class="btn btn-ghost btn-circle swap swap-rotate"
-  title={dark ? 'Switch to light theme' : 'Switch to dark theme'}
+  title={dark ? "切换到浅色主题" : "切换到深色主题"}
 >
-  <input type="checkbox" checked={dark} onchange={toggle} aria-label="Toggle color theme" />
+  <input type="checkbox" checked={dark} onchange={toggle} aria-label="切换主题" />
   <Icon name="sun" size={18} class="swap-on" />
   <Icon name="moon" size={18} class="swap-off" />
 </label>

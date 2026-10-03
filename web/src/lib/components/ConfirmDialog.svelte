@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   // Open while mounted; it owns busy and failure state, and a successful action
   // closes it.
@@ -13,7 +14,7 @@
     icon,
     confirmLabel,
     busyLabel,
-    cancelLabel = 'Cancel',
+    cancelLabel = "取消",
     confirmClass = 'btn-error',
     confirmDisabled = false,
     failureCode,
@@ -76,6 +77,6 @@
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button aria-label="Close" disabled={busy}>close</button>
+    <button aria-label="关闭" disabled={busy}>关闭</button>
   </form>
 </dialog>

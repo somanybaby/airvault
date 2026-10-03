@@ -1,3 +1,4 @@
+<!-- Modified by somanybaby on 2026-10-03: Simplified Chinese localization. See NOTICE.md; GPL-3.0-or-later. -->
 <script lang="ts">
   import { statusStore, devicesStore } from '../lib/stores.svelte';
   import EmptyState from '../lib/components/EmptyState.svelte';
@@ -28,12 +29,12 @@
 <div class="flex flex-col gap-6">
   <div class="flex flex-wrap items-end justify-between gap-3">
     <div>
-      <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">Devices</h1>
-      <p class="mt-1 text-sm text-base-content/60">Wireless iPhone backups to this NAS</p>
+      <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">设备</h1>
+      <p class="mt-1 text-sm text-base-content/60">将 iPhone 无线备份到这台 NAS</p>
     </div>
     <button type="button" class="btn btn-primary btn-sm" onclick={() => (pairOpen = true)}>
       <Icon name="plug" size={14} />
-      Pair device
+      配对设备
     </button>
   </div>
 
@@ -41,9 +42,9 @@
     <div role="alert" class="alert alert-warning alert-soft">
       <Icon name="alert" size={18} />
       <div>
-        <p class="font-medium">USB/Wi-Fi is unavailable</p>
+        <p class="font-medium">USB/Wi-Fi 不可用</p>
         <p class="text-sm opacity-80">
-          netmuxd isn't answering, so devices can't be reached. AirVault reconnects on its own.
+          netmuxd 无响应，暂时无法连接设备。AirVault 会自动尝试重新连接。
         </p>
         {#if muxer?.error}
           <p class="mt-1 font-mono text-xs opacity-60">{muxer.error}</p>
@@ -56,22 +57,22 @@
     <EmptyState
       icon="offline"
       tone="danger"
-      title="Backend offline"
-      message="AirVault can't be reached right now. This view will recover automatically once the daemon is back."
+      title="服务离线"
+      message="暂时无法连接 AirVault，服务恢复后页面会自动更新。"
     />
   {:else if loadError}
-    <EmptyState icon="alert" tone="danger" title="Could not load devices" message={loadError}>
-      <button type="button" class="btn btn-primary btn-sm" onclick={() => devicesStore.refresh()}>Retry</button>
+    <EmptyState icon="alert" tone="danger" title="无法加载设备列表" message={loadError}>
+      <button type="button" class="btn btn-primary btn-sm" onclick={() => devicesStore.refresh()}>重试</button>
     </EmptyState>
   {:else if showEmpty}
     <EmptyState
       icon="plug"
-      title="No devices yet"
-      message="Pair an iPhone over USB once to enable wireless backups. It only takes a minute."
+      title="尚无设备"
+      message="先通过 USB 配对 iPhone，即可启用无线备份。"
     >
       <button type="button" class="btn btn-primary btn-sm" onclick={() => (pairOpen = true)}>
         <Icon name="plug" size={14} />
-        Start pairing
+        开始配对
       </button>
     </EmptyState>
   {:else}
